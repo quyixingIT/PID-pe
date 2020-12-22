@@ -25,13 +25,30 @@ computed: {
 watch: {},
 //方法集合
 methods: {
-    my_charts(){
+    my_charts(item){
         // let dataTime=this.item[0].datatime //横坐标数据
         // let data1=this.item[0].data1 //数据1
         // let data2=this.item[0].data2 //数据2
         // const title=["投运率","综合评分"]
          //以下三步即可完成echarts的初始化使用,代码注释的详解别忘了看看哈~
-     const  myCharts = this.$echarts.init(document.querySelector(`#${this.id}`));
+         debugger
+         if(item.length !=0){
+      const myCharts = this.$echarts.init(document.querySelector(`#${this.id}`));
+     const ratioWeek=item[0] //
+     const ratioLegend=item[1]
+     var series=[];
+     //var a=["装置1","装置2"]
+   for(var i = 0;i<ratioWeek.length;i++){
+    
+        series.push({
+           name: ratioLegend[i],
+           type: 'line',
+           data: ratioWeek[i]
+       });
+     
+      }
+         
+    
     //  const a=this.item[0]
     //  const b=this.item
      //debugger
@@ -52,7 +69,8 @@ methods: {
                transitionDuration:0
             },
           legend: {
-            data:['总体回路','关键回路'],
+            //data:a,
+            data:ratioLegend,
             top:'15%'
           },
           xAxis : [{  //x轴坐标数据
@@ -66,23 +84,26 @@ methods: {
                 formatter: '{value} '
               }
             }],
-          series: [  //驱动图表生成的数据内容数组，几条折现，数组中就会有几个对应对象，来表示对应的折线
-            {
-              name:"总体回路",
-              type: "line",  //pie->饼状图  line->折线图  bar->柱状图
-              data:this.item[0], 
-              },
-            {
-              name:"关键回路",
-              type: "line",  //pie->饼状图  line->折线图  bar->柱状图
-              data:this.item[1],
-              }
-          ]}
+           series: series 
+          // [  //驱动图表生成的数据内容数组，几条折现，数组中就会有几个对应对象，来表示对应的折线
+          //   {
+          //     name:"总体回路",
+          //     type: "line",  //pie->饼状图  line->折线图  bar->柱状图
+          //     data:this.item[0], 
+          //     },
+          //   {
+          //     name:"关键回路",
+          //     type: "line",  //pie->饼状图  line->折线图  bar->柱状图
+          //     data:this.item[1],
+          //     }
+         // ]
+          }
       //myCharts.setOption(options);
       if (options && typeof options === "object") {
         myCharts.setOption(options, true);
         window.addEventListener("resize", () => { myCharts.resize();});
        
+    }
     }
     }
 },
@@ -92,8 +113,27 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted(){
-    this.my_charts()
+
+    this.my_charts(this.item)
+   // this.my_charts(this.item1)
+},
+watch:{
+  item:{
+    handler(newVal,oldVal){
+      debugger
+      let value=newVal
+      //arry.push(newVal[0],[newVal[1]])
+      let arry=value.splice(2)
+      if(newVal){
+        this.my_charts(arry)
+      }else{
+        this.my_charts(oldVal)
+      }
+    }
+  }
+  
 }
+
 }
 </script>
 <style scoped>

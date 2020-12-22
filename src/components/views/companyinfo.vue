@@ -206,21 +206,14 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
             >
               
             </el-button>
-             <el-button
-              size='mini'
-              type='text'
-             icon="el-icon-circle-check"
-              on-click={() => this.submit(node, data)}
-            >
             
-            </el-button>
             {
               data.IsShow ? (
                 <span>
                   <el-input
                     placeholder='请输入内容'
                     value={data.label}
-                    nativeOnChange={ (e) => this.onKeyDownchange(e)}
+                    nativeOnChange={ (e) => this.onKeyDownchange(e,data)}
                     onInput={ (a) => this.Inp(a, data) }
                    
                     clear>
@@ -245,22 +238,40 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     //         </span>
     //       </span>);
     //   },
-    onKeyDownchange(e){
+    /** 编辑框回车事件 */
+    onKeyDownchange(e,data){
       debugger
-       if(e.keyCode == 13) {
-         debugger
-          //事件操作
-      }
-    },
-     Inp(value, data) {
-      data.label = value
-    },
-      alter(node, data) {
-        debugger
         if(data.IsShow){
            const info=JSON.stringify(data)
           updateCompanyinfo(info).then(res=>{
             debugger
+            if(res.success){
+               this.$message.success(res.msg)
+            data.IsShow = !data.IsShow 
+            }else{
+               this.$message.error(res.msg)
+                data.IsShow = !data.IsShow 
+            }
+           
+          })
+        }else{
+     console.log(node)
+      console.log(data)
+      data.IsShow = !data.IsShow
+      //this.subFlag=1
+        }
+    },
+    /**编辑 */
+     Inp(value, data) {
+      data.label = value
+    },
+    /**点击编辑按钮 */
+      alter(node, data) {
+        //debugger
+        if(data.IsShow){
+           const info=JSON.stringify(data)
+          updateCompanyinfo(info).then(res=>{
+           // debugger
             if(res.success){
                this.$message.success(res.msg)
             data.IsShow = !data.IsShow 
@@ -282,6 +293,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
         debugger
 
         },
+        /**新增 */
        append(data) {
            debugger
            let id=Math.ceil(Math.random()*100); 
@@ -292,9 +304,28 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
           this.$set(data, 'children', []);
         }
         data.children.push(newChild);
-
+  if(data.children.length !=0){
+    //debugger
+    let aa=data.children[data.children.length-1]
+     this.subFlag=0
+        const info=JSON.stringify(aa)
+          console.log(info)
+        addCompanyinfo(info).then(res=>{
+        if(res.success){
+         //debugger
+       data.children[data.children.length-1].id=res.ID
+          this.$message.success(res.msg)
+          }else{
+           // debugger
+            data.children.pop()
+             this.$message.error(res.msg)
+            
+          }
+          console.log(res)
+        })
+    }
       },
-
+/** 删除 */
       remove(node, data) {
         debugger
         deleteCompanyinfo(data).then(res=>{
@@ -319,23 +350,23 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
       handleDelete(index, row) {
         console.log(index, row);
       },
-      submit(node,data){
-debugger
-        this.subFlag=0
-        const info=JSON.stringify(data)
-          console.log(info)
-        addCompanyinfo(info).then(res=>{
-        if(res.success){
-         debugger
+//       submit(node,data){
+// debugger
+//         this.subFlag=0
+//         const info=JSON.stringify(data)
+//           console.log(info)
+//         addCompanyinfo(info).then(res=>{
+//         if(res.success){
+//          debugger
        
-          this.$message.success(res.msg)
-          }else{
-             this.$message.error(res.msg)
-          }
-          console.log(res)
-        })
+//           this.$message.success(res.msg)
+//           }else{
+//              this.$message.error(res.msg)
+//           }
+//           console.log(res)
+//         })
 
-      }
+//       }
     },
   }
 </script>

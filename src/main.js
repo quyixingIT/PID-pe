@@ -32,10 +32,8 @@ router.beforeEach( async (to, from, next) => {
      const hasToken =window.localStorage.getItem("token")
     //const hasToken =""
     let aa=store.state.routes;
-    
-    if (hasToken) {
-      
-        if (to.path === '/login') {
+     if (hasToken) {
+         if (to.path === '/login') {
             //next({ path: '/Home' })
             next()
             NProgress.done()
@@ -89,7 +87,7 @@ router.beforeEach( async (to, from, next) => {
             }
         }
     } else {
-        debugger
+       // debugger
         if (whiteList.indexOf(to.path) !== -1) {
             next()
         } else {

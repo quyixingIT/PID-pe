@@ -97,7 +97,7 @@ this.readMenu();
         /** 点击菜单项的回调 */
         handleSelect(key, keyPath){
            // debugger
-           localStorage.setItem('index',key)
+           sessionStorage.setItem('index',key)
             console.log(key)
             console.log(keyPath)
         },

@@ -39,7 +39,7 @@ export default function request (option){
  instance.interceptors.request.use(
     
          config =>{
-             debugger
+            // debugger
              // console.log('来到了request拦截success中');
          // 1.当发送网络请求时, 在页面中添加一个loading组件, 作为动画
          startLoading();
@@ -77,7 +77,7 @@ export default function request (option){
          return config;
      },
      error =>{
-         debugger
+        // debugger
          //对请求错误做什么
          return Promise.reject(error);
      })
@@ -90,7 +90,7 @@ export default function request (option){
  //响应拦截
  instance.interceptors.response.use(
      response => {
-         debugger
+        // debugger
            endLoading();
             if (response.status === 200) {
              return response.data;
@@ -101,7 +101,7 @@ export default function request (option){
      error => {
          endLoading();
         // let that=this
-         debugger
+         //debugger
          //console.log(error.response.status);
          if (error && error.response) {
 			switch (error.response.status) {

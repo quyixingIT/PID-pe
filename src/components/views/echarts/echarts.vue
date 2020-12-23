@@ -31,7 +31,7 @@ methods: {
         // let data2=this.item[0].data2 //数据2
         // const title=["投运率","综合评分"]
          //以下三步即可完成echarts的初始化使用,代码注释的详解别忘了看看哈~
-         debugger
+         //debugger
          if(item.length !=0){
       const myCharts = this.$echarts.init(document.querySelector(`#${this.id}`));
      const ratioWeek=item[0] //
@@ -120,7 +120,7 @@ mounted(){
 watch:{
   item:{
     handler(newVal,oldVal){
-      debugger
+      //debugger
       let value=newVal
       //arry.push(newVal[0],[newVal[1]])
       let arry=value.splice(2)

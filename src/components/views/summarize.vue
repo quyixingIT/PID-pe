@@ -2,7 +2,7 @@
 <template>
      <el-tabs v-model="activeName" @tab-click="handleClick" style="height:95%;padding-left:10px">
     <el-tab-pane label="总览" name="first" style="height:100%">
-      <tab1></tab1>
+      <tab1 v-if="echartsFlag"></tab1>
     </el-tab-pane>
     <el-tab-pane label="分类总览" name="second" style="height:100%">
       <category></category>
@@ -28,7 +28,8 @@ components: {
 data() {
 //这里存放数据
 return {
-     activeName: 'first'
+     activeName: 'first',
+     echartsFlag:true
        
 };
 },
@@ -52,7 +53,13 @@ watch: {
 //方法集合
 methods: {
   handleClick(tab, event) {
+    //debugger
         console.log(tab, event);
+        if(tab.label=='分类总览'){
+          this.echartsFlag=false
+        }else{
+          this.echartsFlag=true
+        }
       }
   //js中获取多个数组中的同一索引值
 

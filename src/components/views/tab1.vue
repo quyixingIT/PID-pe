@@ -146,7 +146,7 @@ watch: {
 //方法集合
 methods: {
   getsumdataList(index){
-    debugger
+   // debugger
     // index=localStorage.getItem('index')
    // debugger
     sumdatalist(index).then(res=>{

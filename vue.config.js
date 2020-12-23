@@ -32,7 +32,7 @@ module.exports = {
   devServer: {
           host: '192.168.1.113',
          // host: '192.168.1.180',//服务器
-          port: 8080,
+          port: 8081,
           //port: 2002, //服务器
           https: false,
           open: true,

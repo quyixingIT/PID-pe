@@ -146,7 +146,7 @@ watch: {
 //方法集合
 methods: {
   getsumdataList(index){
-   // debugger
+    
     // index=localStorage.getItem('index')
    // debugger
     sumdatalist(index).then(res=>{
@@ -175,18 +175,23 @@ methods: {
         this.flag=true //通知echarts组件开始渲染
            
        // this.echartsdata1=res.compositeScore
+       debugger
        //综合评分
+       this.echartsdata2=[]
       let compositeScore=res.compositeScoreWeek
      // let compositeScoreMain=res.compositeScoreMain
       let compositeScoreLegend=res.compositeScoreLegend
-      this.compositeScoreTimeWeek=res.compositeScoreTimeWeek[0]
+     // this.compositeScoreTimeWeek=res.compositeScoreTimeWeek[0]
+     this.compositeScoreTimeWeek=res.timeWeek
       this.echartsdata2.push(compositeScore)
        this.echartsdata2.push(compositeScoreLegend)
        const a=this.echartsdata2
        //投运率
+       this.echartsdata1=[]
          let ratio=res.ratioWeek
        let ratioMain=res.ratioLegend
-        this.axis=res.assessTimeWeek[0]   
+       // this.axis=res.assessTimeWeek[0]   
+       this.axis=res.timeWeek 
        this.echartsdata1.push(ratio)
        this.echartsdata1.push(ratioMain)
        const b=this.echartsdata1
@@ -279,10 +284,12 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+  debugger
   let index=sessionStorage.getItem('index') // debugger
   if(!index){
     let menu=JSON.parse(sessionStorage.getItem('menu'))
     index=menu[0].children[0].path
+    sessionStorage.setItem('index',index)
      this.getsumdataList(index)
   }else{
   this.getsumdataList(index)
@@ -318,6 +325,7 @@ mounted() {
 .contentFirst{
 width: 100%;
 height: 15%;
+overflow: auto;
 /* background-color: rebeccapurple; */
 }
 .contentSecond{
@@ -334,6 +342,7 @@ height: 15%;
 .contentFour{
     width:100%;
     height:30%;
+    overflow: auto;
     /* background-color: hotpink; */
 }
 .tableContent{

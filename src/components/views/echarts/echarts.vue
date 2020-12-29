@@ -34,7 +34,9 @@ methods: {
          //debugger
          if(item.length !=0){
       const myCharts = this.$echarts.init(document.querySelector(`#${this.id}`));
-     const ratioWeek=item[0] //
+     const ratioWeek=item[0]
+     //ratioWeek.push()
+      //
      const ratioLegend=item[1]
      var series=[];
      //var a=["装置1","装置2"]
@@ -120,12 +122,12 @@ mounted(){
 watch:{
   item:{
     handler(newVal,oldVal){
-      //debugger
+      debugger
       let value=newVal
       //arry.push(newVal[0],[newVal[1]])
-      let arry=value.splice(2)
+     // let arry=value.splice(2)
       if(newVal){
-        this.my_charts(arry)
+        this.my_charts(newVal)
       }else{
         this.my_charts(oldVal)
       }

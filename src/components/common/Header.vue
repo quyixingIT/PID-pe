@@ -195,7 +195,7 @@ export default {
             if (command == 'loginout') {
                 localStorage.removeItem('ms_username');
                 localStorage.removeItem('token');
-                localStorage.removeItem('index')
+                sessionStorage.removeItem('index')
                 this.$router.push('/login');
             }else {
 

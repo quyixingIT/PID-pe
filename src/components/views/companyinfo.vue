@@ -1,61 +1,14 @@
 <!-- 企业信息管理页面 -->
 <template>
 <div>
-    <div>
-      <el-table
-    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-    style="width: 100%">
-    <el-table-column
-      label="创建时间"
-      prop="date">
-    </el-table-column>
-    <el-table-column
-      label="企业名称"
-      prop="name">
-    </el-table-column>
-    <el-table-column
-      label="装置总数"
-      prop="name">
-    </el-table-column>
-    <el-table-column
-      label="企业联系人"
-      prop="name">
-    </el-table-column>
-    <el-table-column
-      label="企业联系方式"
-      prop="name">
-    </el-table-column>
-    <el-table-column
-      label="企业地址"
-      prop="address">
-    </el-table-column>
-    <el-table-column
-      align="right">
-      <template slot="header" slot-scope="">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="输入关键字搜索"/>
-      </template>
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-   </div>
+   
         <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
                        :page-sizes="[1,2,5,10]" :page-size="limit" layout="total, sizes, prev, pager, next, jumper"
                        :total="total">
         </el-pagination> -->
         <!-- 树形图 -->
         <div  class="custom-tree-container">
-            <p>配置企业信息表</p>
+            <p style="padding-left:10px">配置企业信息表</p>
             <el-tree
             :data="data"
            

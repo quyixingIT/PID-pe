@@ -1,7 +1,7 @@
 import axios from './request'
 export function tabledatalist(objStr){
     return axios({
-        url:'/api/LoopAssess/summarizeTable',
+        url:'/api/LoopAssess/newSummarizeTable',
         params:{
             objStr
         }

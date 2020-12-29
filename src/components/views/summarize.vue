@@ -4,7 +4,7 @@
     <el-tab-pane label="总览" name="first" style="height:100%">
       <tab1 v-if="echartsFlag"></tab1>
     </el-tab-pane>
-    <el-tab-pane label="分类总览" name="second" style="height:100%">
+    <el-tab-pane label="分类总览" name="second" :lazy=true style="height:100%">
       <category></category>
     </el-tab-pane>
     

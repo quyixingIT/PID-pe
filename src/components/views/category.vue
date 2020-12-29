@@ -153,6 +153,9 @@ export default {
 components: {
     drawer
 },
+// computed(){
+//   index:sessionStorage.getItem('index')
+// },
 data() {
 //这里存放数据
 return {
@@ -180,7 +183,8 @@ return {
           sortName:'',
           sortType:'',
           "currentPage":1,
-          "pageSize":10
+          "pageSize":10,
+          index:this.getIndex()
         },
          //limit: 5,
         total: null,
@@ -196,7 +200,21 @@ return {
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+ 
+ "$route":function(to,from){
+   debugger
+   let index=sessionStorage.getItem('index')
+   this.formInline.index=index
+   this.tableDatalist()
+   //from 对象中包含当前地址
+   //to 对象中包含目标地址
+   //其实还有一个next参数的
+//这个参数是控制路由是否跳转的
+//如果没写，可以不用写next()来代表允许路由跳转，如果写了就必须写next(),否则路由是不会生效的。
+ }//欢迎加入前端全栈开发交流圈一起学习交流：864305860
+
+},
 //方法集合
 methods: {
 //请求表格数据
@@ -214,6 +232,12 @@ methods: {
     },err=>{
  console.log(err)
     })
+  },
+  /**获取index */
+  getIndex(){
+    debugger
+    let index=sessionStorage.getItem('index')
+    return index
   },
     // 初始页currentPage、初始每页数据数pagesize和数据data
             handleSizeChange: function (page_size) {

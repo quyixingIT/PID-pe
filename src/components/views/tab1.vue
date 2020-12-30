@@ -13,7 +13,7 @@
     :data="tableData"
     style="width: 100%"
      :cell-class-name="tableCellClassName">
-    <!-- :row-class-name="tableRowClassName" -->
+    <!-- :row-class-name="tableRowClassName"  -->
    
       <el-table-column
       label="回路类型"

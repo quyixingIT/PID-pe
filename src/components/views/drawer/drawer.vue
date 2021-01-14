@@ -9,9 +9,10 @@
   direction="rtl"
   ref="workRef"
   :before-close="handleClose">
+  <!-- 头 -->
  <div class="drawerContent">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick" style="height:100%">
-    <el-tab-pane label="日报" name="daily" style="height:90%;overflow:auto" >
+    <el-tab-pane label="日报" name="daily" style="height:96%;overflow:auto" >
       <div class="contentDra">
       <div class="contentTile">
       <el-button type="text">回路名称:</el-button>
@@ -26,6 +27,7 @@
       placeholder="选择日期">
     </el-date-picker>
         </div> 
+        <!-- 第一部分 -->
      <div class="contentFirst1">
       <!-- <div class="first1Children1"></div> -->
       <peresult v-if="flag1" :data="resultData"></peresult> 
@@ -34,8 +36,16 @@
 
        </div> -->
      </div>
+     <!-- 第二部分 -->
      <div class="contentSceond1">
        <rend  v-if="flag2" :data="opTrend"></rend>
+     </div>
+     <!-- 第三部分 -->
+     <div class="contentThree">
+       <h5>诊断摘要</h5>
+       <textarea disabled='true' name="诊断摘要" style="height:85%; width:99%">
+      测量噪声过大，请考虑更改PV滤波设置。
+</textarea>
      </div>
      <!-- <div class="contentThree1">
         <shadowecharts></shadowecharts>  
@@ -222,7 +232,7 @@ justify-content:space-around
 /** 第一个模块 */
 .contentFirst1{
 width: 100%;
-height: 45%;
+height: 40%;
 /* background-color: rgb(56, 196, 28); */
 }
 .first1Children1{
@@ -235,8 +245,12 @@ height: 45%;
 }
 .contentSceond1{
 width: 100%;
-height: 45%;
+height: 40%;
 /* background-color: rgb(41, 15, 136); */
+}
+.contentThree{
+  width: 100%;
+height: 15%;
 }
 .contentThree1{
 width: 100%;

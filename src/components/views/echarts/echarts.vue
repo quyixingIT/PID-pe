@@ -14,7 +14,7 @@ props:["id","title","item","dataTime"],
 data() {
 //这里存放数据
 return {    
-  
+  showloading:false //是否显示无数据加载狂
 };
 },
 //监听属性 类似于data概念
@@ -22,7 +22,7 @@ computed: {
    
 },
 //监控data中的数据变化
-watch: {},
+
 //方法集合
 methods: {
     my_charts(item){
@@ -39,13 +39,19 @@ methods: {
       //
      const ratioLegend=item[1]
      var series=[];
+     var color=['#c4ccd3','#91c7ae', '#61a0a8', '#d48265', '#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570'];
      //var a=["装置1","装置2"]
    for(var i = 0;i<ratioWeek.length;i++){
     
         series.push({
            name: ratioLegend[i],
            type: 'line',
-           data: ratioWeek[i]
+           data: ratioWeek[i],
+          itemStyle:{
+            normal:{
+              color:color[i]
+            }
+          }
        });
      
       }
@@ -58,9 +64,10 @@ methods: {
           title: { 
              text: this.title,   //图表顶部的标题 
             // subtext: ''    //副标题
-            top:'20%' ,         //距离容器顶端的距离
+            top:'10%' ,         //距离容器顶端的距离
             textStyle:{
-                fontSize:14
+                fontSize:14,
+                color:'white'
             }
           },
           grid:{
@@ -73,18 +80,41 @@ methods: {
           legend: {
             //data:a,
             data:ratioLegend,
-            top:'15%'
+            top:'5%',
+            textStyle:{
+              color:'white'
+            }
+          },
+          textStyle:{
+            color:'white'
           },
           xAxis : [{  //x轴坐标数据
             type : 'category',
             boundaryGap : false,
-            data : this.dataTime
+            data : this.dataTime,
+           /*改变x轴颜色*/
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 2, //这里是为了突出显示加上的  
+                        }
+                    },
+            //  nameTextStyle:{
+            //    color:'white'
+            //  }
             }],
            yAxis : [{   //y轴坐标数据
               type : 'value',
               axisLabel : {
                 formatter: '{value} '
-              }
+              },
+               /*改变y轴颜色*/
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 2, //这里是为了突出显示加上的  
+                        }
+                    },
             }],
            series: series 
           // [  //驱动图表生成的数据内容数组，几条折现，数组中就会有几个对应对象，来表示对应的折线
@@ -106,6 +136,16 @@ methods: {
         window.addEventListener("resize", () => { myCharts.resize();});
        
     }
+    if(this.showloading){
+  myCharts.showLoading({
+          text: '暂无数据',
+          color: '#ffffff',
+          textColor: '#8a8e91',
+          maskColor: 'rgba(255, 255, 255, 0.8)',
+     }
+ );
+    }
+    
     }
     }
 },
@@ -122,13 +162,14 @@ mounted(){
 watch:{
   item:{
     handler(newVal,oldVal){
-      debugger
+      //debugger
       let value=newVal
       //arry.push(newVal[0],[newVal[1]])
      // let arry=value.splice(2)
       if(newVal){
         this.my_charts(newVal)
       }else{
+        this.showloading=true
         this.my_charts(oldVal)
       }
     }

@@ -8,7 +8,7 @@
         </el-pagination> -->
         <!-- 树形图 -->
         <div  class="custom-tree-container">
-            <p style="padding-left:10px">配置企业信息表</p>
+            <p style="padding-left:10px;color:aliceblue">配置企业信息表</p>
             <el-tree
             :data="data"
            
@@ -193,7 +193,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     //   },
     /** 编辑框回车事件 */
     onKeyDownchange(e,data){
-      debugger
+     // debugger
         if(data.IsShow){
            const info=JSON.stringify(data)
           updateCompanyinfo(info).then(res=>{
@@ -201,6 +201,10 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
             if(res.success){
                this.$message.success(res.msg)
             data.IsShow = !data.IsShow 
+             this.$store.commit({
+             type:'getmenu',
+              payload:res.viewMenu
+          })
             }else{
                this.$message.error(res.msg)
                 data.IsShow = !data.IsShow 
@@ -228,6 +232,10 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
             if(res.success){
                this.$message.success(res.msg)
             data.IsShow = !data.IsShow 
+             this.$store.commit({
+             type:'getmenu',
+              payload:res.viewMenu
+          })
             }else{
                this.$message.error(res.msg)
                 data.IsShow = !data.IsShow 
@@ -243,12 +251,12 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
      
     },
       editData(data){
-        debugger
+       // debugger
 
         },
         /**新增 */
        append(data) {
-           debugger
+           //debugger
            let id=Math.ceil(Math.random()*100); 
            this.subFlag=1
         const newChild = { id: ++id, label: 'testtest',level:++data.level,partentID:data.id, IsShow: false, children: [] };
@@ -265,9 +273,15 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
           console.log(info)
         addCompanyinfo(info).then(res=>{
         if(res.success){
-         //debugger
+         debugger
        data.children[data.children.length-1].id=res.ID
           this.$message.success(res.msg)
+          this.$store.commit({
+             type:'getmenu',
+              payload:res.viewMenu
+          })
+          // 更改sessionStorage中的值
+          this.$store.commit('SET_ROUTES', res.routerInfoList);
           }else{
            // debugger
             data.children.pop()
@@ -283,7 +297,11 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
         debugger
         deleteCompanyinfo(data).then(res=>{
           if(res.success){
-         debugger
+        // debugger
+          this.$store.commit({
+             type:'getmenu',
+              payload:res.viewMenu
+          })
         this.subFlag=1
         const parent = node.parent;
         const children = parent.data.children || parent.data;
@@ -324,6 +342,21 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
   }
 </script>
 <style>
+ .el-tree{
+  background-color: transparent;
+  color: aliceblue !important;
+}
+.el-tree-node__content:hover{
+    background-color: rgb(70, 70, 97) !important;
+  }
+  .el-tree-node.is-current > .el-tree-node__content {
+     background-color: rgb(70, 70, 97) !important;
+  }
+  
+.el-button--text {
+    color: aliceblue;
+}
+
  .custom-tree-node {
    display: flex;
     flex: 1;

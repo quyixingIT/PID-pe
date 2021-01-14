@@ -180,8 +180,36 @@ mounted() {
 },
 }
 </script>
-<style scoped>
+<style >
 .buttonStyle{
   text-align: center;
+}
+.el-dialog__header {
+  background: #222344 !important;
+  /* color: aliceblue !important; */
+
+}
+.el-dialog__title {
+    line-height: 24px;
+    font-size: 18px;
+    color: #dadee8;
+}
+.el-dialog{
+  background: #2c2f8a !important;
+
+}
+ .el-tree{
+  background-color: transparent;
+  color: aliceblue !important;
+}
+.el-tree-node__content:hover{
+    background-color: rgb(70, 70, 97) !important;
+  }
+  .el-tree-node.is-current > .el-tree-node__content {
+     background-color: rgb(70, 70, 97) !important;
+  }
+  
+.el-button--text {
+    color: aliceblue;
 }
 </style>

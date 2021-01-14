@@ -57,6 +57,7 @@
  import MenuTree from "../common/MenuTree.vue"
 import bus from '../common/bus';
 import {getMenu} from '../../request/menumanage'
+//import { set } from 'vue/types/umd';
 export default {
      components: {
             MenuTree: MenuTree
@@ -64,7 +65,7 @@ export default {
     data() {
         return {
             collapse: false,
-            items: []
+            //items: []
         };
     },
     computed: {
@@ -72,6 +73,17 @@ export default {
            // debugger
             return this.$route.path.replace('/', '');
             //return this.$store.state.routes[1].children[0].path;
+        },
+        items:{
+            set(v){
+               this.$store.commit({
+                type:'getmenu',
+                payload:v
+            })
+            },
+            get(){
+                return this.$store.state.menu
+            }
         }
     },
     mounted(){
@@ -105,9 +117,15 @@ this.readMenu();
         var that=this;
         var user=localStorage.getItem('ms_username')
     getMenu().then(function (response) {
-       debugger
+      // debugger
             console.log(response);
-             that.items=response.viewMenuList;
+            that.$store.commit({
+                type:'getmenu',
+                payload:response.viewMenuList
+            })
+            //that.items=response.viewMenuList;
+            that.items=that.$store.state.menu;
+             console.log(that.$store.state.menu)
              //console.log(that.items instanceof Object);
             // console.log(that.items[0].subs.length);
         })

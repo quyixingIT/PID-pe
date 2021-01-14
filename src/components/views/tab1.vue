@@ -9,10 +9,13 @@
     <div class="contentFirst">
         <!-- ------------------表格部分-------------------------------------- -->
       <div class="tableContent" ref="tableCot">
+        <!-- :header-cell-style="tableHeaderColor" -->
     <el-table
     :data="tableData"
     style="width: 100%"
-     :cell-class-name="tableCellClassName">
+     :cell-class-name="tableCellClassName"
+     
+     >
     <!-- :row-class-name="tableRowClassName"  -->
    
       <el-table-column
@@ -43,15 +46,22 @@
   <!-- 表格结尾---------------------------- ----------------------------------------->
     </div>
     <!--- 第二部分 echarts------------------------------->
+    <div class="contentFive" >
+      <cylinder id="cylinder1" class="cylinder1" title="操作数" :item="operationNum"></cylinder>
+      <cricle id="cylinder2" class="cylinder2" title="总回路数" :item="loopsTotal"></cricle>
+      <cylinder id="cylinder3" class="cylinder3" title="平均操作数" :item="avgOperationNum"></cylinder>
+    </div>
+     <!--- 第三部分 echarts------------------------------->
     <div class="contentSecond">
         <mycharts v-if="flag" id="echarts1" title="投运率" :item="echartsdata1" :dataTime="axis"></mycharts>
         <mycharts v-if="flag" id="echarts2" title="综合评分" :item="echartsdata2" :dataTime="compositeScoreTimeWeek"></mycharts>
     </div>
-    <!------ 第二部分echarts结尾  ---------------------------------------------------- -->
-     <!------ 第三部分echarts开头  ---------------------------------------------------- -->
+    <!------ 第三部分echarts结尾  ---------------------------------------------------- -->
+     <!------ 第四部分echarts开头  ---------------------------------------------------- -->
    <div class="contentThree">
        <cumlateecharts v-if="flag" :Ydata="echartsShift" :data="echartsShiftData"></cumlateecharts>
    </div>
+    <!--- 第5部分 echarts------------------------------->
    <div class="contentFour">
        <template>
     <el-table
@@ -103,11 +113,15 @@
 import mycharts from './echarts/echarts'
 import cumlateecharts from './echarts/cumulateecharts'
 import {sumdatalist}  from '../../request/category'
+import cylinder from './echarts/cylinder'
+import cricle from './echarts/cricle'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
     mycharts,
-    cumlateecharts
+    cumlateecharts,
+    cylinder,
+    cricle
 },
 
 data() {
@@ -122,7 +136,10 @@ return {
       echartsShiftData:[],//第三部分echarts的数据
       flag:false,
       Height:250,
-      compositeScoreTimeWeek:[]
+      compositeScoreTimeWeek:[],
+      loopsTotal:null,
+      avgOperationNum:null,
+      operationNum:null,
        
 };
 },
@@ -132,7 +149,7 @@ computed: {},
 watch: {
  
  "$route":function(to,from){
-   debugger
+  // debugger
    let index=sessionStorage.getItem('index')
    this.getsumdataList(index)
    //from 对象中包含当前地址
@@ -151,7 +168,7 @@ methods: {
    // debugger
     sumdatalist(index).then(res=>{
       if(res.success){
- if(res.compositeScore !==null){
+ if(res.ratioLegend !==null){
         console.log(res)
         //debugger
           const format=function(arr){
@@ -175,7 +192,7 @@ methods: {
         this.flag=true //通知echarts组件开始渲染
            
        // this.echartsdata1=res.compositeScore
-       debugger
+      // debugger
        //综合评分
        this.echartsdata2=[]
       let compositeScore=res.compositeScoreWeek
@@ -196,7 +213,13 @@ methods: {
        this.echartsdata1.push(ratioMain)
        const b=this.echartsdata1
        // this.echartsdata2=res.ratio
-
+  //回路总数
+  //debugger
+  this.loopsTotal=res.loopsTotal
+  //平均操作数
+  this.avgOperationNum=res.avgOperationNum
+  //操作数
+  this.operationNum=res.operationNum
         //处理第三部分的echcarts数据
         let arrResult=[] //获取纵坐标
         let shiftResult
@@ -206,7 +229,7 @@ methods: {
         }
         console.log(arrResult)
         this.echartsShift=arrResult
-
+        //debugger
        // this.echartsShiftData=res.table
         //抽离数据
         this.echartsShiftData= this.trans(res.table)
@@ -237,6 +260,9 @@ methods: {
      this. tableData1=[],
      this. echartsShift=[],//第三部分echarts的横坐标
       this.echartsShiftData=[],
+      this.avgOperationNum=0,
+      this.loopsTotal=0,
+      this.operationNum=0
          this.$message.warning('暂无数据，请先上传数据！');
       }
       }else{
@@ -275,6 +301,13 @@ methods: {
         }
         return '';
       },
+      // 修改table header的背景色
+    // tableHeaderColor({ row, column, rowIndex, columnIndex }) {
+    //   if (rowIndex === 0) {
+    //     return 'background-color: lightblue;color: #fff;font-weight: 500;'
+    //   }
+    // }
+
       //保留小数
   // filter(row, column, cellValue, index) {
   //        debugger
@@ -284,7 +317,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-  debugger
+ // debugger
   let index=sessionStorage.getItem('index') // debugger
   if(!index){
     let menu=JSON.parse(sessionStorage.getItem('menu'))
@@ -314,23 +347,65 @@ mounted() {
 }
 </script>
 <style >
+
+.el-table{
+/* 表格字体颜色 */
+color:white;
+/* 表格边框颜色 */
+/* border: 0.5px solid #758a99; */
+/* height: 500px; */
+}
+/* 表格内背景颜色 */
+.el-table th, .el-table tr,.el-table td{
+border: 0;
+background-color: transparent;
+}
+
+/* 使表格背景透明 */
+/* .el-table th, .el-table tr {
+background-color: transparent;
+} */
+.el-table, .el-table__expanded-cell {
+    background-color: transparent;
+}
+
+.el-table th, .el-table tr {
+    background-color: transparent;
+}
+.el-table th{
+  background-color: transparent !important;
+}
+/* 表格表头字体颜色 */
+.el-table thead {
+color: white;
+font-weight: 500;
+background-color: rgba(148, 144, 144, 0.3)
+}
+/**鼠标悬浮颜色 */
+.el-table__body tr:hover > td{
+    background-color:rgb(127, 147, 177) !important;
+}
+ .el-table__header-wrapper thead :hover{
+     background-color: rgb(127, 147, 177) !important;
+} 
 .contentSum{
     width: 100%;
     height:100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* background-color: aqua; */
+    /* background:url('../../assets/img/backgroundimg.png') no-repeat;
+    background-size: cover; */
 }
 .contentFirst{
 width: 100%;
-height: 15%;
+height: 10%;
 overflow: auto;
 /* background-color: rebeccapurple; */
 }
 .contentSecond{
     width: 100%;
-    height:35%;
+    height:30%;
     /* background-color: rosybrown; */
     display: flex;
 }
@@ -341,10 +416,33 @@ overflow: auto;
 }
 .contentFour{
     width:100%;
-    height:30%;
+    height:15%;
     overflow: auto;
     /* background-color: hotpink; */
 }
+.contentFive{
+  width: 100%;
+  height:25% ;
+  display: flex;
+  flex-direction:row ;
+  /* background-color: azure; */
+ 
+}
+.cylinder1 {
+  width:30%;
+  height: 100%;
+  overflow: hidden;
+}
+.cylinder2{
+   width:40%;
+  height: 100%;
+   overflow: hidden;
+}
+ .cylinder3{
+   width:30%;
+  height: 100%;
+  overflow: hidden;
+ }
 .tableContent{
     width:100%;
     height:100%;

@@ -123,6 +123,19 @@
  </template>
     </el-table-column>
     <el-table-column
+      prop="CompositeScore"
+      label="操作数量"
+       min-width='10'
+      sortable
+      >
+       <template slot-scope="scope">
+  
+        <span v-if="scope.row.CompositeScore<100" style="color: green">{{scope.row.CompositeScore}}</span>
+        <span v-else style="color: red">{{scope.row.CompositeScore}}</span>
+   
+ </template>
+    </el-table-column>
+    <el-table-column
            label="操作"
             min-width='10'
      >
@@ -131,8 +144,11 @@
       </template>
     </el-table-column>
   </el-table>
-   <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formInline.currentPage"
-                       :page-sizes="[10,20,30]" :page-size="formInline.pageSize" layout="total, sizes, prev, pager, next, jumper"
+   <el-pagination
+    class="msg-pagination-container"
+     :background="isBackground"  
+    @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formInline.currentPage"
+                       :page-sizes="10" :page-size="formInline.pageSize" layout=" prev, pager, next"
                        :total="total">
         </el-pagination>
     </div>
@@ -159,6 +175,7 @@ components: {
 data() {
 //这里存放数据
 return {
+    isBackground:true, //将background设置为true便可以修改分页的背景样式
     drawer:false, //要传给子组件的数值
     title:'',
     searchFormField:{
@@ -416,8 +433,29 @@ filters:{
   rounding(value){
      return value.toFixed(2)
   }
-}
+},
+
 }
 </script>
-<style scoped>
+<style >
+.msg-pagination-container.is-background .el-pager li {
+    /*对页数的样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .btn-next {
+    /*对下一页的按钮样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .btn-prev {
+    /*对上一页的按钮样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .el-pager li:not(.disabled).active {
+    /*当前选中页数的样式进行修改*/
+    background-color: #446cff;
+    color: #FFF;
+  }
 </style>

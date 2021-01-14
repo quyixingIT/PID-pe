@@ -33,14 +33,23 @@
         created(){
             
         },
-        //  watch: {
-        //     menuData: function(newVal,oldVal){
-        //         console.log("2222");
-        //         this.cData = newVal;  //newVal即是chartData
-        //        console.log( this.cData);
-        //        console.log("1111111");
-        //     }
-        // },
+//          watch: {
+//            menuData:{
+//     handler(newVal,oldVal){
+//       //debugger
+//       //let value=newVal
+//       //arry.push(newVal[0],[newVal[1]])
+//      // let arry=value.splice(2)
+//       if(newVal){
+//           debugger
+//         this.menuData=newVal
+//       }else{
+//         //this.showloading=true
+//          this.menuData=oldVal
+//       }
+//     }
+//   }
+//         },
         // setup({root}, props) {
         //     return {
         //         props,

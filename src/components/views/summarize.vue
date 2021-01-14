@@ -94,6 +94,12 @@ mounted() {
  
 }
 </script>
-<style >
-
+<style>
+.el-tabs__item{
+  color:azure  !important
+}
+.is-active{
+color: rgb(107, 147, 233) !important;
+/* background-color: #35a121 !important; */
+}
 </style>

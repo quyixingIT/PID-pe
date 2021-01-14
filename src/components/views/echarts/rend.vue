@@ -99,6 +99,7 @@ my_charts(){
     let Max1=calMax([sp,pv]),Max2=calMax(op)
     let options = {
         title:{
+          top:'2%',
             text: '趋势图',
             textStyle:{
             fontSize:12,
@@ -108,7 +109,7 @@ my_charts(){
         data: ['PV', 'SP','OP'],
         right: '2%',
         icon: "circle",
-        top:'0%'
+        top:'2%'
     },
     tooltip:{
         trigger:'axis',
@@ -116,8 +117,8 @@ my_charts(){
     },
          grid: {
         left: '10%',
-        top:'20%',
-        bottom: '15%',
+        top:'10%',
+        bottom: '10%',
         containLabel: false
     },
     xAxis: {

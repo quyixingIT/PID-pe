@@ -69,9 +69,14 @@ export default {
         /*position: relative;*/
 
     /*}*/
+    .content-box{
+        background:url('../../assets/img/backgroundimg.png') no-repeat;
+        background-size: cover;
+    }
     .content{
         overflow: auto;
         padding: 0;
+      
     }
 
     .el-table__header tr,

@@ -24,6 +24,7 @@ watch: {},
 //方法集合
 methods: {
 my_charts(){
+
     const mycharts=this.$echarts.init(this.$refs.mycharts)
     let option = {
     tooltip: {  //提示框
@@ -36,6 +37,9 @@ my_charts(){
     legend: {
         data: ['优', '良', '中','差','开环'],
         top:0,
+         textStyle:{
+              color:'white'
+            }
     },
     grid: {
         top:'10%',
@@ -47,20 +51,37 @@ my_charts(){
 
 
     },
+     textStyle:{
+            color:'white'
+          },
     xAxis: [
         {
             type: 'value',
+             /*改变x轴颜色*/
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 2, //这里是为了突出显示加上的  
+                        }
+                    },
             // data:[0,20,40,60,80,100]
         }
     ],
     yAxis: [
         {
             type: 'category',
-            show:false,
+            show:true,
             axisTick: {
                 show: false
             },
-            data: this.Ydata
+            data: this.Ydata,
+             /*改变x轴颜色*/
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 2, //这里是为了突出显示加上的  
+                        }
+                    },
         }
     ],
     series: [
@@ -156,6 +177,22 @@ created() {
 mounted() {
 this.my_charts()
 },
+watch:{
+  data:{
+    handler(newVal,oldVal){
+      debugger
+      let value=newVal
+      //arry.push(newVal[0],[newVal[1]])
+     // let arry=value.splice(2)
+      if(newVal){
+        this.my_charts()
+      }else{
+        this.my_charts()
+      }
+    }
+  }
+  
+}
 }
 </script>
 <style scoped>

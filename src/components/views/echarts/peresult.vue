@@ -33,6 +33,7 @@ my_charts(){
     let options = {
     title: {
         text: '评估结果',
+         top:'2%' ,
         textStyle:{
             fontSize:12,
         },
@@ -50,7 +51,7 @@ my_charts(){
     // },
     grid: {
         left: '10%',
-         top:'20%',
+         top:'5%',
         bottom: '2%',
         containLabel: false
     },

@@ -39,23 +39,50 @@ methods: {
       //
      const ratioLegend=item[1]
      var series=[];
-     var color=['#c4ccd3','#91c7ae', '#61a0a8', '#d48265', '#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570'];
+     var effectValues=[]; ///闪烁效果
+     let a,c
+     let b=[]
+       var color=['#c4ccd3','#91c7ae', '#61a0a8', '#d48265', '#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570'];
      //var a=["装置1","装置2"]
+     let e
+     let dataTime=this.dataTime
    for(var i = 0;i<ratioWeek.length;i++){
-    
-        series.push({
+           series.push({
            name: ratioLegend[i],
            type: 'line',
            data: ratioWeek[i],
           itemStyle:{
             normal:{
               color:color[i]
-            }
+            },
+            //borderWidth:10,     
           }
        });
+//  if(ratioWeek[i][ratioWeek[i].length-1]<ratioWeek[i][ratioWeek[i].length-2]){
+//       // let a=ratioWeek[i][ratioWeek[i].length-1]
+//       // let b=ratioWeek[i][ratioWeek[i].length-2]
+//       // let c=dataTime[dataTime.length-1]
+      
+//        e={
+//     value:ratioWeek[i][ratioWeek[i].length-1],
+//     symbolSize:30
+//         }
+         
+//      // var replace = ratioWeek[i].splice(ratioWeek[i].length-1,ratioWeek[i].length-1,e); //删除一项,插入两项
+//      effectValues.push(e)
+// debugger
+//     }else{
+//        effectValues.push('')
+//     }
      
       }
-         
+      // let sliceValue=ratioWeek.slice(-2)
+     
+    // debugger
+
+ 
+
+     
     
     //  const a=this.item[0]
     //  const b=this.item
@@ -75,8 +102,48 @@ methods: {
           },
           tooltip: {   //鼠标悬浮框的提示文字
               trigger: 'axis',
-               transitionDuration:0
+               transitionDuration:0,
+                formatter: function(params, ticket, callback) {
+                  debugger
+                  console.log(params[0].dataIndex)
+                  var flag=false
+                 
+ console.log(params)
+                             console.log(b)
+                            var res = '' + params[0].name;
+                            
+ for (var i = 0, l = params.length; i < l; i++) {
+    if(params[0].dataIndex==6){
+flag=false
+   for(let j=0;j<b.length;j++){
+                               console.log(b[j])
+                              if(b[j]==i){
+                                flag=true
+                                 res += '<br><span style="color:red;">' + params[i].seriesName + ' : ' + params[i].value + '</span>';
+                                 break
+                              }
+                        
+                            }
+            if(!flag){
+        res += '<br>' + params[i].seriesName + ' : ' + params[i].value;
+          }
+      }else{
+      res += '<br>' + params[i].seriesName + ' : ' + params[i].value;
+     }
+   
+                            
+                            }
+                  
+                           
+                           
+                            setTimeout(function() {
+                                // 仅为了模拟异步回调
+                                callback(ticket, res);
+                            }, 1000)
+                            return 'loading';
+                        }
             },
+            
           legend: {
             //data:a,
             data:ratioLegend,
@@ -130,21 +197,69 @@ methods: {
           //     }
          // ]
           }
+          for(var i = 0;i<ratioWeek.length;i++){
+            if(ratioWeek[i][ratioWeek[i].length-1]<ratioWeek[i][ratioWeek[i].length-2]){
+              b.push(i)
+              //debugger
+               effectValues=ratioWeek[i].slice(0)
+               e={
+      value:effectValues.pop(),
+      symbolSize:30
+        }
+        //debugger
+        effectValues.push(e)
+             // ratioWeek[i].splice(ratioWeek[i].length-1,ratioWeek[i].length-1,e); //删除一项,插入1项
+
+            }
+          }
+          var effectScatter = {
+				name : "闪动数据",
+				type : 'effectScatter',
+				coordinateSystem : 'cartesian2d',//2d坐标系
+				data : effectValues,
+				symbolOffset : [ 0, -30 ],
+				symbolSize : 0,
+				large : true,
+				symbol : 'circle', //图形 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+				legendHoverLink : true, //是否启用图例 hover 时的联动高亮。
+				hoverAnimation : true, //是否开启鼠标 hover 的提示动画效果。
+				effectType : 'ripple', //特效类型，目前只支持涟漪特效'ripple'。
+				showEffectOn : 'render', //配置何时显示特效。可选：'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
+ 
+				cursor : 'pointer',
+				rippleEffect : { //涟漪特效相关配置。
+					period : 1.5, //动画的时间。
+					scale : 6, //动画中波纹的最大缩放比例。
+					brushType : 'stroke', //波纹的绘制方式，可选 'stroke' 和 'fill'。
+				},
+				hoverAnimation : true,
+				itemStyle : {
+					normal : {
+						color : 'red',
+						shadowBlur : 10,
+						shadowColor : '#333'
+					}
+				},
+				zlevel : 1
+      }
+      if(effectValues.length !==0){
+        options.series.push(effectScatter)
+      }
       //myCharts.setOption(options);
       if (options && typeof options === "object") {
         myCharts.setOption(options, true);
         window.addEventListener("resize", () => { myCharts.resize();});
        
     }
-    if(this.showloading){
-  myCharts.showLoading({
-          text: '暂无数据',
-          color: '#ffffff',
-          textColor: '#8a8e91',
-          maskColor: 'rgba(255, 255, 255, 0.8)',
-     }
- );
-    }
+//     if(this.showloading){
+//   myCharts.showLoading({
+//           text: '暂无数据',
+//           color: '#ffffff',
+//           textColor: '#8a8e91',
+//           maskColor: 'rgba(255, 255, 255, 0.8)',
+//      }
+//  );
+//     }
     
     }
     }

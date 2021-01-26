@@ -256,15 +256,17 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
         },
         /**新增 */
        append(data) {
-           //debugger
+           debugger
            let id=Math.ceil(Math.random()*100); 
            this.subFlag=1
         const newChild = { id: ++id, label: 'testtest',level:++data.level,partentID:data.id, IsShow: false, children: [] };
-        if (!data.children) {
+        if (data.children.length==0) {
          // debugger
           this.$set(data, 'children', []);
+        }else{
+      data.children.push(newChild);
         }
-        data.children.push(newChild);
+        
   if(data.children.length !=0){
     //debugger
     let aa=data.children[data.children.length-1]

@@ -51,7 +51,7 @@ methods: {
          //debugger
          //当前视口宽度
       let nowClientWidth = document.documentElement.clientWidth;
-      debugger
+     // debugger
       // 换算方法
       let nowSize = function (val, initWidth = 1920) {
         return val * (nowClientWidth / initWidth);
@@ -72,7 +72,14 @@ methods: {
   let options = {
    // backgroundColor: '#142468',
     title:{
-          //text: '实时旋转饼图' 
+          text: '回路数' ,
+          textStyle:{
+              color:'rgba(25,223,221,.7)',
+              fontSize: 14,
+          },
+          top:'59%',
+          left:'47%'
+
     },
     series: [
         {

@@ -122,16 +122,47 @@
     <span>{{scope.row.AverageSP  | rounding}}</span>
  </template>
     </el-table-column>
+
+     <el-table-column
+      prop="VarianceOP"
+      label="OP方差"
+       min-width='12'
+      sortable
+      >
+       <template slot-scope="scope">
+    <span>{{scope.row.VarianceOP  | rounding}}</span>
+ </template>
+    </el-table-column>
     <el-table-column
-      prop="CompositeScore"
+      prop="VarianceSP"
+      label="SP方差"
+       min-width='12'
+      sortable
+      >
+       <template slot-scope="scope">
+    <span>{{scope.row.VarianceSP  | rounding}}</span>
+ </template>
+    </el-table-column>
+    <el-table-column
+      prop="VariancePV"
+      label="PV方差"
+       min-width='12'
+      sortable
+      >
+       <template slot-scope="scope">
+    <span>{{scope.row.VariancePV  | rounding}}</span>
+ </template>
+    </el-table-column>
+    <el-table-column
+      prop="OperationNum"
       label="操作数量"
        min-width='10'
       sortable
       >
        <template slot-scope="scope">
   
-        <span v-if="scope.row.CompositeScore<100" style="color: green">{{scope.row.CompositeScore}}</span>
-        <span v-else style="color: red">{{scope.row.CompositeScore}}</span>
+        <span v-if="scope.row.OperationNumIsAlarm===0" style="color: green">{{scope.row.OperationNum}}</span>
+        <span v-else style="color: red">{{scope.row.OperationNum}}</span>
    
  </template>
     </el-table-column>
@@ -188,8 +219,8 @@ return {
             }
         
         },
-        nowDate:'',//当前时间
-  tableData: [],
+    nowDate:'',//当前时间
+    tableData: [],
      endTime:'',
       formInline: {
           loopType1: '液位',
@@ -220,7 +251,7 @@ computed: {},
 watch: {
  
  "$route":function(to,from){
-   debugger
+   //debugger
    let index=sessionStorage.getItem('index')
    this.formInline.index=index
    this.tableDatalist()
@@ -236,10 +267,10 @@ watch: {
 methods: {
 //请求表格数据
   tableDatalist(){
-   debugger
+   //debugger
     let objStr=JSON.stringify(this.formInline)
     tabledatalist(objStr).then(res=>{
-     debugger
+     //debugger
        this.tableData=res.loopAssessInfoList
        this.total=res.total
        this.formInline.pageSize=res.pageSize
@@ -252,13 +283,13 @@ methods: {
   },
   /**获取index */
   getIndex(){
-    debugger
+    //debugger
     let index=sessionStorage.getItem('index')
     return index
   },
     // 初始页currentPage、初始每页数据数pagesize和数据data
             handleSizeChange: function (page_size) {
-              debugger
+              //debugger
                 this.formInline.currentPage = 1; //第一页
                 this.formInline.pageSize = page_size; //每页先显示多少数据
                 this.tableDatalist()
@@ -307,7 +338,7 @@ methods: {
        // console.log(row);
       },
       parentFn(load){
-        debugger
+        //debugger
         this.drawer = load
       },
      onSubmit() {

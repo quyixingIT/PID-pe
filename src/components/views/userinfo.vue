@@ -96,8 +96,11 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
-                       :page-sizes="[1,2,5,10]" :page-size="limit" layout="total, sizes, prev, pager, next, jumper"
+        <el-pagination
+         class="msg-pagination-container"
+     :background="isBackground" 
+         @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
+                       :page-sizes="[5,10]" :page-size="limit" layout=" prev, pager, next"
                        :total="total">
         </el-pagination>
     </div>
@@ -109,6 +112,7 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
         name: 'userinfo',
         data(){
             return {
+                isBackground:true, //将background设置为true便可以修改分页的背景样式
                 data:[],
                 showBtn: [],//判断当前显示什么操作按钮
                 showEdit:[],//判断当前行编辑框是否显示
@@ -201,7 +205,7 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
             getroleinfo:function(){
               var that=this;
                getSelectRole().then(function (response) {
-                 debugger
+                // debugger
                         console.log(response);
                         console.log(response.roleInfoList);
                         that.roleinfolist=response.roleInfoList
@@ -227,7 +231,7 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
             },
             //删除
             handleDelete:function(index,row,data) {
-              debugger
+              //debugger
                 var that=this;
                 var rows=JSON.stringify(row)
                 console.log(rows)
@@ -330,14 +334,14 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
                         // }
                     });
                 }else {
-                  debugger
+                  //debugger
                   var rows=JSON.stringify(row)
                     //console.log(rows)
                     // this.$message("更新成功")
                     if(!this.addFlag){
-                      debugger
+                     // debugger
                        updataUser(rows).then(res=> {
-                         debugger
+                        // debugger
                             console.log(res)
                             /** 将selecet下拉框设为不可编辑 */
                                 this.disabled=true;
@@ -367,7 +371,7 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
                        adduserUpdate(rows).then(res=> {
                          /** 将selecet下拉框设为不可编辑 */
                                 this.disabled=true;
-                         debugger
+                         //debugger
                             if (res.success){
                                 that.$message.success(res.msg);
                                 row.UpdateTime=currentTime;
@@ -449,6 +453,26 @@ import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../.
     };
 </script>
 
-<style scoped>
-
+<style >
+.msg-pagination-container.is-background .el-pager li {
+    /*对页数的样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .btn-next {
+    /*对下一页的按钮样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .btn-prev {
+    /*对上一页的按钮样式进行修改*/
+    background-color: #10263c;
+    color: #FFF;
+  }
+  .msg-pagination-container.is-background .el-pager li:not(.disabled).active {
+    /*当前选中页数的样式进行修改*/
+    background-color: #446cff;
+    color: #FFF;
+  }
+ 
 </style>

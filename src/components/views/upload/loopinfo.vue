@@ -39,10 +39,12 @@
  
   <el-button size="small" type="primary" @click="uploadFile">上传文件<i class="el-icon-upload el-icon--right"></i></el-button>
 <div class="tableStyle">
+  <!-- :row-class-name="tableRowClassName" -->
+  <!-- 行变色 -->
   <el-table
     :data="tableData"
     style="width: 100%"
-    :row-class-name="tableRowClassName">
+    >
     <el-table-column
       prop="LoopName"
       label="回路名"
@@ -61,23 +63,59 @@
       prop="LoopType"
       label="回路类型">
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       prop="PV"
       label="PV">
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
+      prop="PV"
+      label="PV"
+        >
+       <template slot-scope="scope">
+     <span v-if="scope.row.PVIsEnable===0">{{scope.row.PV}}</span>
+        <span v-else style="color: red">{{scope.row.PV}}</span>
+ </template>
+    </el-table-column>
+    <!-- <el-table-column
       prop="SP"
       label="SP">
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
+      prop="SP"
+      label="SP"
+        >
+       <template slot-scope="scope">
+     <span v-if="scope.row.SPIsEnable===0">{{scope.row.SP}}</span>
+        <span v-else style="color: red">{{scope.row.SP}}</span>
+ </template>
+    </el-table-column>
+    <!-- <el-table-column
       prop="OP"
       label="OP">
-    </el-table-column>
+    </el-table-column> -->
+    
     <el-table-column
+      prop="OP"
+      label="OP"
+        >
+       <template slot-scope="scope">
+     <span v-if="scope.row.OPIsEnable===0">{{scope.row.OP}}</span>
+        <span v-else style="color: red">{{scope.row.OP}}</span>
+ </template>
+    </el-table-column>
+    <!-- <el-table-column
       prop="Mode"
       label="Mode">
+    </el-table-column> -->
+<el-table-column
+      prop="Mode"
+      label="Mode"
+        >
+       <template slot-scope="scope">
+     <span v-if="scope.row.ModeIsEnable===0">{{scope.row.Mode}}</span>
+        <span v-else style="color: red">{{scope.row.Mode}}</span>
+ </template>
     </el-table-column>
-
   </el-table>
 </div>
 </div>
@@ -218,14 +256,14 @@ methods: {
       //       });
     
       // },
-        tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      },
+      //   tableRowClassName({row, rowIndex}) {
+      //   if (rowIndex === 1) {
+      //     return 'warning-row';
+      //   } else if (rowIndex === 3) {
+      //     return 'success-row';
+      //   }
+      //   return '';
+      // },
       handleRemove(file){
          this.$refs.upload.abort(); //取消上传
                 this.$message({message: '成功移除' + file.name, type: 'success'});

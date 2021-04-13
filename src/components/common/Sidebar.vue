@@ -76,22 +76,26 @@ export default {
         },
         items:{
             set(v){
+                //debugger
                this.$store.commit({
                 type:'getmenu',
                 payload:v
             })
             },
             get(){
+                //debugger
+                let a=this.$store.state.menu
                 return this.$store.state.menu
             }
         }
     },
     mounted(){
+       // debugger
 this.readMenu();
     },
     created() {
          const a=this.$store.state
-        // debugger
+         //debugger
         const menu = JSON.parse(localStorage.getItem('menu'));
       if(menu) this.$store.commit('SET_ROUTES', menu);
         // 通过 Event Bus 进行兄弟组件间通信，来折叠侧边栏
@@ -110,10 +114,11 @@ this.readMenu();
         handleSelect(key, keyPath){
            // debugger
            sessionStorage.setItem('index',key)
-            console.log(key)
-            console.log(keyPath)
+            //console.log(key)
+            //console.log(keyPath)
         },
     readMenu:function() {
+        //
         var that=this;
         var user=localStorage.getItem('ms_username')
     getMenu().then(function (response) {
@@ -125,7 +130,7 @@ this.readMenu();
             })
             //that.items=response.viewMenuList;
             that.items=that.$store.state.menu;
-             console.log(that.$store.state.menu)
+            // console.log(that.$store.state.menu)
              //console.log(that.items instanceof Object);
             // console.log(that.items[0].subs.length);
         })
@@ -146,12 +151,15 @@ this.readMenu();
     top: 70px;
     bottom: 0;
     overflow-y: scroll;
+    background-color: #324157;
+
 }
 .sidebar::-webkit-scrollbar {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
     width: 250px;
+    min-height: 400px;
 }
 .sidebar > ul {
     height: 100%;

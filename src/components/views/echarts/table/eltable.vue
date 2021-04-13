@@ -5,63 +5,46 @@
     <el-table
       style="width: 100%;"
       :data="tableData"
-      :header-cell-style="discountHeaderStyle"
+      
       >
+      <!-- :header-cell-style="discountHeaderStyle" -->
       <el-table-column
-       label="常规统计指标"
+       label="参数"
+        prop="parmarms"
        >
-   <el-table-column
-      prop="name1"
+        </el-table-column>
+    <el-table-column
+       label="平均值"
+        prop="avrege"
        >
- 
-      </el-table-column>
-       <el-table-column
-       prop="name2"
+       <template slot-scope="scope">
+ <span>{{scope.row.avrege | rounding}}</span>
+ </template>
+        </el-table-column>
+          <el-table-column
+       label="标准差"
+        prop="biao"
        >
- 
-      </el-table-column>
-       <el-table-column
-       prop="name3"
-        >
- 
-      </el-table-column>
-       <el-table-column
-      prop="name4"
-        >
- 
-      </el-table-column>
-       <el-table-column
-        prop="name5"
+        <template slot-scope="scope">
+ <span>{{scope.row.biao | rounding}}</span>
+ </template>
+        </el-table-column>
+          <el-table-column
+       label="最小值"
+        prop="min"
        >
- 
-      </el-table-column>
-
-       <el-table-column
-       prop="name6"
-        >
- 
-      </el-table-column>
-       <el-table-column
-       prop="name7"
+       <template slot-scope="scope">
+ <span>{{scope.row.min | rounding}}</span>
+ </template>
+        </el-table-column>
+          <el-table-column
+       label="最大值"
+        prop="max"
        >
- 
-      </el-table-column>
-       <el-table-column
-        prop="name8"
-       >
- 
-      </el-table-column>
-       <el-table-column
-       prop="name9"
-       >
- 
-      </el-table-column>
-       <el-table-column
-       prop="name10"
-       >
- 
-      </el-table-column>
-      </el-table-column>
+       <template slot-scope="scope">
+ <span>{{scope.row.max | rounding}}</span>
+ </template>
+        </el-table-column>
      
      </el-table>
   </template>
@@ -75,68 +58,35 @@
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
+props:["eldata"],
 data() {
 //这里存放数据
 return {
-  tableData:[
-     {
-       name1:"测量值均值",
-       name2:"10.496",
-       name3:"测量值方差",
-       name4:"4.615",
-       name5:"测量值最大值",
-       name6:"16.7708",
-       name7:"测量值最小值",
-       name8:"2.5826",
-       name9:"控制偏差均值",
-       name10:"-0.0065"
-   }, {
-       name1:"测量值均值",
-       name2:"10.496",
-       name3:"测量值方差",
-       name4:"4.615",
-       name5:"测量值最大值",
-       name6:"16.7708",
-       name7:"测量值最小值",
-       name8:"2.5826",
-       name9:"控制偏差均值",
-       name10:"-0.0065"
-   }, {
-       name1:"测量值均值",
-       name2:"10.496",
-       name3:"测量值方差",
-       name4:"4.615",
-       name5:"测量值最大值",
-       name6:"16.7708",
-       name7:"测量值最小值",
-       name8:"2.5826",
-       name9:"控制偏差均值",
-       name10:"-0.0065"
-   }, {
-       name1:"测量值均值",
-       name2:"10.496",
-       name3:"测量值方差",
-       name4:"4.615",
-       name5:"测量值最大值",
-       name6:"16.7708",
-       name7:"测量值最小值",
-       name8:"2.5826",
-       name9:"控制偏差均值",
-       name10:"-0.0065"
-   }, {
-       name1:"测量值均值",
-       name2:"10.496",
-       name3:"测量值方差",
-       name4:"4.615",
-       name5:"测量值最大值",
-       name6:"16.7708",
-       name7:"测量值最小值",
-       name8:"2.5826",
-       name9:"控制偏差均值",
-       name10:"-0.0065"
-   }
-
-   ]
+ tableData: [{
+            parmarms: 'PV',
+            avrege: this.eldata.AveragePV,
+            biao: this.eldata.STDPV,
+            min:this.eldata.MinPV,
+            max:this.eldata.MaxPV
+          }, {
+            parmarms: "SP",
+            avrege: this.eldata.AverageSP,
+            biao: this.eldata.STDSP,
+            min:this.eldata.MinSP,
+            max:this.eldata.MaxSP
+          }, {
+           parmarms: 'OP',
+            avrege: this.eldata.AverageOP,
+            biao: this.eldata.STDOP,
+            min:this.eldata.MinOP,
+            max:this.eldata.MaxOP
+          }, {
+           parmarms: '偏差',
+            avrege: this.eldata.AverageErrorPVSP,
+            biao: this.eldata.STDErrorOPSP,
+            min:this.eldata.MinErrorOPSP,
+            max:this.eldata.MaxErrorOPSP,
+          }]
 };
 },
 //监听属性 类似于data概念
@@ -146,13 +96,13 @@ watch: {},
 //方法集合
 methods: {
       //合并表头
-      discountHeaderStyle({row, column, rowIndex, columnIndex}){
+      // discountHeaderStyle({row, column, rowIndex, columnIndex}){
       
-        if(rowIndex!=0){
+      //   if(rowIndex!=0){
          
-          return 'display:none'
-        }
-      }
+      //     return 'display:none'
+      //   }
+      // }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -162,6 +112,15 @@ created() {
 mounted() {
 
 },
+filters: {
+ rounding (value) {
+ let m=value.toFixed(0)
+ if(m==-0){
+   m=0
+ }
+ return m
+ }
+}
 }
 </script>
 <style scoped>

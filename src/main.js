@@ -12,6 +12,42 @@ import echarts from 'echarts';
 import {setAsyncRoutes} from "./router/asyncRouter"
 //import { messages } from './components/common/I18n.vue';
 import moment from 'moment' /** 引用时间格式化插件 */
+import htmlToPdf from './untils/htmlToPdf' /** 引入html转化PDF插件 */
+//插件的包
+import PerfectScrollbar from 'perfect-scrollbar';
+//对应的css
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+const elScrollBar = (el) => {
+    if (el._ps_ instanceof PerfectScrollbar) {
+      el._ps_.update()
+    } else {
+      el._ps_ = new PerfectScrollbar(el, { suppressScrollX: true })
+    }
+  }
+  
+Vue.use(htmlToPdf)
+  //自定义指令(滚动条个性化)
+  Vue.directive('scrollBar', {
+    inserted (el, binding, vnode) {
+      const rules = ['fixed', 'absolute', 'relative']
+      if (!rules.includes(window.getComputedStyle(el, null).position)) {
+        console.error(`perfect-scrollbar所在的容器的position属性必须是以下之一：${rules.join('、')}`)
+      }
+      elScrollBar(el)
+    },
+    componentUpdated (el, binding, vnode, oldVnode) {
+      try {
+        vnode.context.$nextTick(
+          () => {
+            elScrollBar(el)
+          }
+        )
+      } catch (error) {
+        console.error(error)
+        elScrollBar(el)
+      }
+    }
+  })
 Vue.use(require('vue-moment'));
 Vue.prototype.moment = moment
 Vue.prototype.$echarts = echarts; /** 使用插件echarts */
@@ -33,12 +69,23 @@ router.beforeEach( async (to, from, next) => {
     //const hasToken =""
     let aa=store.state.routes;
      if (hasToken) {
+       //debugger
          if (to.path === '/login') {
+           debugger
             //next({ path: '/Home' })
+            //
+            localStorage.removeItem('ms_username');
+            localStorage.removeItem('token');
+            sessionStorage.removeItem('index')
+            sessionStorage.removeItem('menu')
             next()
+           // location.reload()
             NProgress.done()
         } else {
-            
+            debugger
+            let str=to.path
+           let index= str.replace(/\//g,'')
+           sessionStorage.setItem('index',index)
             //异步获取store中的路由
            // let route = await store.state.routes;
            //同步获取store中的路由
@@ -56,9 +103,10 @@ router.beforeEach( async (to, from, next) => {
                   //sessionStorage.valueOf()
                    // const accessRoutes = getAsyncRoutes(await store.state.routes );
                    //const aa= JSON.parse(sessionStorage.getItem("menu"));
+                   //debugger
                   store.commit('SET_ROUTES', bb)
                   // setAsyncRoutes(bb);
-                    
+                    //debugger
                     let rr=router
                      let redirect=from
                     // if(to.path ===redirect){

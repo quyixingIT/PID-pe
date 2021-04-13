@@ -9,7 +9,7 @@
                 <!--<el-scrollbar style="height: 100%">-->
                 <transition name="move" mode="out-in">
                     <keep-alive :include="tagsList">
-                        <router-view></router-view>
+                        <router-view :key="key"></router-view>
                     </keep-alive>
                 </transition>
                  <el-backtop target=".content"></el-backtop>
@@ -32,6 +32,14 @@ export default {
             collapse: false
         };
     },
+    computed: {
+        /*** 如果不加key值的话，在路由跳转时，总是跳转同一界面，data中的数据不更新。 */
+    key() {
+        /** 因为路径是唯一的所以用fullPath作为key */
+      return this.$route.fullPath;
+    },
+  },
+
     components: {
         vHead,
         vSidebar,
@@ -74,7 +82,7 @@ export default {
         background-size: cover;
     }
     .content{
-        overflow: auto;
+        overflow: hidden;
         padding: 0;
       
     }

@@ -13,12 +13,15 @@ components: {},
 props:{
     data:{
         type:Object
+    },
+    colors:{
+      type:String
     }
 },
 data() {
 //这里存放数据
 return {
-
+  color:'#91c7ae'
 };
 },
 //监听属性 类似于data概念
@@ -87,7 +90,30 @@ my_charts(){
     let minval = minint * 10;//让显示的刻度是整数
     return minval;
   }
-
+if(this.colors=="开环"){
+this.color="#91c7ae"
+}else{
+  this.color="#91c7ae"
+}
+let markData=[]
+if(this.data.echartStyleListAll.length !==0){
+markData=this.data.echartStyleListAll
+}
+// let markData=[[
+//             {
+//               "xAxis": "2021/3/16 00:00:00",
+//               "itemStyle":{
+//                 "color":'#aaa'
+//             }
+//             },
+//             {
+//               "xAxis": "2021/3/16 23:59:55",
+//               "itemStyle":{
+//                "color":'#aaa'
+//             }
+//             },
+//           ]
+//           ]
 
     let mycharts=this.$echarts.init(this.$refs.rend)
     let echarts=this.$echarts
@@ -100,16 +126,17 @@ my_charts(){
     let options = {
         title:{
           top:'2%',
-            text: '趋势图',
+            text: 'PV SP趋势',
             textStyle:{
             fontSize:12,
         }
         },
          legend: {
-        data: ['PV', 'SP','OP'],
-        right: '2%',
+        data: ['PV', 'SP'],
+        left: '0%',
         icon: "circle",
-        top:'2%'
+        top:'20%',
+        orient:'vertical'
     },
     tooltip:{
         trigger:'axis',
@@ -119,7 +146,10 @@ my_charts(){
         left: '10%',
         top:'10%',
         bottom: '10%',
-        containLabel: false
+        right:"0",
+        containLabel: false,
+        backgroundColor:this.color,
+        show: true
     },
     xAxis: {
         type: 'category',
@@ -155,33 +185,63 @@ my_charts(){
          },
 
     },
-     {
-         name:'OP',
-         nameLocation:'center',
-        type: 'value',
-        nameGap:40,
-        nameRotate:360,
-        axisTick:{
-            show:false,
-        },
-         nameTextStyle:{
-             color:'darkgray'
-         },
-         min:Min2,
-         max:Max2,
-          splitNumber: 5,
-          interval:(Max2-Min2)/5,
-           splitLine: {
-    lineStyle: {
-        // 使用深浅的间隔色
-         color: 'darkgray',
-        type:'dashed',
-    }
-},
-    },
+//      {
+//          name:'OP',
+//          nameLocation:'center',
+//         type: 'value',
+//         nameGap:40,
+//         nameRotate:360,
+//         axisTick:{
+//             show:false,
+//         },
+//          nameTextStyle:{
+//              color:'darkgray'
+//          },
+//          min:Min2,
+//          max:Max2,
+//           splitNumber: 5,
+//           interval:(Max2-Min2)/5,
+//            splitLine: {
+//     lineStyle: {
+//         // 使用深浅的间隔色
+//          color: 'darkgray',
+//         type:'dashed',
+//     }
+// },
+//     },
     
     ],
     series: [
+       {
+      name: "异常数据",
+      type: "line",
+      animation: false,
+      areaStyle: {
+        normal: {},
+      },
+      lineStyle: {
+        normal: {
+          width: 1,
+        },
+      },
+      markArea: {
+        silent:true, //图形是否不响应和触发鼠标事件，默认为 false，即响应和触发鼠标事件
+       
+        data:markData,             //判定颜色显示区域，从0-30是红色
+        
+      },
+    },
+    {
+        name: 'PV',
+        //data: [520, 532, 501, 534, 590, 930],
+        data: pv,
+        type: 'line',
+         showSymbol:false,
+          itemStyle:{
+             color:'rgb(10,102,115)'
+         },
+         smooth: true
+    },
         {
           name: 'SP',
         //data: [820, 932, 901, 934, 1290, 1330],
@@ -189,33 +249,24 @@ my_charts(){
         type: 'line',
          showSymbol:false,
          itemStyle:{
-             color:'rgb(145,234,254)'
+             color:'rgb(15,234,254)'
          },
          smooth: true
     },
-     {
-        name: 'PV',
-        //data: [520, 532, 501, 534, 590, 930],
-        data: pv,
-        type: 'line',
-         showSymbol:false,
-          itemStyle:{
-             color:'rgb(104,192,155)'
-         },
-         smooth: true
-    },
-     {
-        name: 'OP',
-        //data: [20, 32, 10, 34, 90, 30],
-        data: op,
-        type: 'line',
-        yAxisIndex: 1,
-         showSymbol:false,
-          itemStyle:{
-             color:'rgb(96,114,145)'
-         },
-         smooth: true
-    },
+     
+   
+    //  {
+    //     name: 'OP',
+    //     //data: [20, 32, 10, 34, 90, 30],
+    //     data: op,
+    //     type: 'line',
+    //     yAxisIndex: 1,
+    //      showSymbol:false,
+    //       itemStyle:{
+    //          color:'rgb(96,114,145)'
+    //      },
+    //      smooth: true
+    // },
     ]
 };
  mycharts.setOption(options,true)

@@ -8,8 +8,8 @@
     <el-tab-pane label="实时数据上传" :dataId="dataID" :dialogFlag="centerDialogVisible" name="second">
      <onlineload></onlineload>
       </el-tab-pane> -->
-    <el-tab-pane label="指标数据上传" name="first">
-      <loopinfo :dataId="dataID" @showbox="toshow"></loopinfo>
+    <el-tab-pane label="控制资产配置" name="first">
+      <loopinfo :dataId="dataID" ref="loopinfo"  @showbox="toshow"></loopinfo>
     </el-tab-pane>
    
   </el-tabs>
@@ -34,7 +34,7 @@
   node-key="id"
   :check-strictly="true"
 
-  
+  default-expand-all="true"
   @check-change="templateCheckChange"
 
  
@@ -44,8 +44,9 @@
   <!-- :props="defaultProps" -->
 </el-tree>
   </div>
-    <!-- <el-button @click="centerDialogVisible = false">取 消</el-button> -->
+    
     <div class="buttonStyle">
+      <el-button  @click="centerDialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="submit">确 定</el-button>
     </div>
    
@@ -165,6 +166,9 @@ methods: {
     submit(){
       if(this.dataID){
       this.centerDialogVisible=false
+      this.$refs.loopinfo.btshow=true
+      this.$refs.loopinfo.uploadFile(0)
+      
       }else{
         this.$message.error("请选择回路归属")
       }
@@ -209,7 +213,47 @@ mounted() {
      background-color: rgb(70, 70, 97) !important;
   }
   
-.el-button--text {
+/* .el-button--text {
     color: aliceblue;
+} */
+.el-table{
+/* 表格字体颜色 */
+color:white;
+/* 表格边框颜色 */
+/* border: 0.5px solid #758a99; */
+/* height: 500px; */
 }
+/* 表格内背景颜色 */
+.el-table th, .el-table tr,.el-table td{
+border: 0;
+background-color: transparent;
+}
+
+/* 使表格背景透明 */
+/* .el-table th, .el-table tr {
+background-color: transparent;
+} */
+.el-table, .el-table__expanded-cell {
+    background-color: transparent;
+}
+
+.el-table th, .el-table tr {
+    background-color: transparent;
+}
+.el-table th{
+  background-color: transparent !important;
+}
+/* 表格表头字体颜色 */
+.el-table thead {
+color: white;
+font-weight: 500;
+background-color: rgba(148, 144, 144, 0.3)
+}
+/**鼠标悬浮颜色 */
+.el-table__body tr:hover > td{
+    background-color:rgb(127, 147, 177) !important;
+}
+ .el-table__header-wrapper thead :hover{
+     background-color: rgb(127, 147, 177) !important;
+} 
 </style>

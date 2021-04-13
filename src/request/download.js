@@ -14,3 +14,10 @@ export function getTree(){
         
     })
 }
+/** 用户管理中的菜单权限树状图 */
+export function getuserInfoTree(){
+    return axios({
+        url:'api/Navigation/getRightsMenuTree',
+        
+    })
+}

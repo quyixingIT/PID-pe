@@ -6,7 +6,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">华理自动化控制资产管理平台</div>
+        <div class="logo">华理自动化控制资产管理平台软件V1.0</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -31,7 +31,7 @@
                 <!-- </div> -->
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../../assets/img/img.jpg" />
+                    <img src="../../assets/img/hlauto.jpg" />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -196,7 +196,11 @@ export default {
                 localStorage.removeItem('ms_username');
                 localStorage.removeItem('token');
                 sessionStorage.removeItem('index')
+                sessionStorage.removeItem('menu')
+             
+               // this.$store.commit('USER_SIGNOUT',null)
                 this.$router.push('/login');
+                   location.reload()
             }else {
 
                 this.dialogFormVisible=true
@@ -206,10 +210,10 @@ export default {
         submitForm(formName) {
             var userName= localStorage.getItem('ms_username')
             var that=this;
-           debugger
+           //debugger
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        debugger
+                        //debugger
                         // alert('submit!');
                         that.$axios.get('UserInfo/updatePassword',{
                             params: {
@@ -218,7 +222,7 @@ export default {
                                 newPwd:that.ruleForm.pass
                             }
                         }).then(res=> {
-                            debugger
+                            //debugger
                             //console.log(res)
                             if (res.success) {
                                 that.$message.success('修改成功');
@@ -232,7 +236,7 @@ export default {
 
 
                         }).catch(function (error) {
-                            debugger
+                            //debugger
                             that.$message.error('修改失败');
                             //console.log(error);
                         });
@@ -335,7 +339,7 @@ export default {
 }
 .header .logo {
     float: left;
-    width: 350px;
+    width: 550px;
     line-height: 70px;
 }
 .header-right {
@@ -347,6 +351,12 @@ export default {
     height: 70px;
     align-items: center;
 }
+/* .logo img {
+    display: block;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+} */
 .btn-fullscreen {
     transform: rotate(45deg);
     margin-right: 5px;

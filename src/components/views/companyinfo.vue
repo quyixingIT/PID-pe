@@ -8,7 +8,7 @@
         </el-pagination> -->
         <!-- 树形图 -->
         <div  class="custom-tree-container">
-            <p style="padding-left:10px;color:aliceblue">配置企业信息表</p>
+            <p style="padding-left:10px;color:aliceblue">企业资产分布配置</p>
             <el-tree
             :data="data"
            
@@ -97,6 +97,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     ]
      
       return {
+        editflag:false,
         subFlag:0,
         data: JSON.parse(JSON.stringify(data)),
         tableData: [{
@@ -127,11 +128,56 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
       getcompanyinfo(){
         getCompanyinfo().then(res=>{
           console.log(res)
+          //debugger
           this.data=res.companysInfoTree
         })
       },
       renderContent(h, { node, data, store }) {
-      return (
+        //debugger
+        if(data.level==4){
+           return (
+        <span class='custom-tree-node'>
+          <span>{node.label}</span>
+          <span>
+          
+            <el-button
+              size='mini'
+              type='text'
+               icon="el-icon-delete"
+              on-click={() => this.remove(node, data)}
+            >
+             
+            </el-button>
+            <el-button
+              size='mini'
+              type='text'
+             icon="el-icon-edit"
+              on-click={() => this.alter(node, data)}
+            >
+              
+            </el-button>
+            
+            {
+              data.IsShow ? (
+                <span>
+                  <el-input
+                    placeholder='请输入内容'
+                    value={data.label}
+                    nativeOnChange={ (e) => this.onKeyDownchange(e,data)}
+                    onInput={ (a) => this.Inp(a, data) }
+                   
+                    clear>
+                  </el-input>
+                </span>
+              ) : (
+                ''
+              )
+            }
+          </span>
+        </span>
+      )
+        }else{
+           return (
         <span class='custom-tree-node'>
           <span>{node.label}</span>
           <span>
@@ -179,6 +225,8 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
           </span>
         </span>
       )
+        }
+     
     },
 
     //      renderContent(h, { node, data, store }) {
@@ -197,7 +245,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
         if(data.IsShow){
            const info=JSON.stringify(data)
           updateCompanyinfo(info).then(res=>{
-            debugger
+            //debugger
             if(res.success){
                this.$message.success(res.msg)
             data.IsShow = !data.IsShow 
@@ -224,8 +272,8 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     },
     /**点击编辑按钮 */
       alter(node, data) {
-        //debugger
-        if(data.IsShow){
+       
+          if(data.IsShow){
            const info=JSON.stringify(data)
           updateCompanyinfo(info).then(res=>{
            // debugger
@@ -242,12 +290,17 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
             }
            
           })
+          //this.editflag=false
         }else{
      console.log(node)
       console.log(data)
       data.IsShow = !data.IsShow
+      //this.editflag=true
       //this.subFlag=1
         }
+        
+        //debugger
+        
      
     },
       editData(data){
@@ -256,13 +309,14 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
         },
         /**新增 */
        append(data) {
-           debugger
+          //debugger
            let id=Math.ceil(Math.random()*100); 
            this.subFlag=1
-        const newChild = { id: ++id, label: 'testtest',level:++data.level,partentID:data.id, IsShow: false, children: [] };
+        const newChild = { id: ++id, label: 'testtest',level:data.level+1,partentID:data.id, IsShow: false, children: [] };
         if (data.children.length==0) {
-         // debugger
+          //debugger
           this.$set(data, 'children', []);
+           data.children.push(newChild);
         }else{
       data.children.push(newChild);
         }
@@ -275,7 +329,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
           console.log(info)
         addCompanyinfo(info).then(res=>{
         if(res.success){
-         debugger
+         //debugger
        data.children[data.children.length-1].id=res.ID
           this.$message.success(res.msg)
           this.$store.commit({
@@ -296,8 +350,12 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
       },
 /** 删除 */
       remove(node, data) {
-        debugger
-        deleteCompanyinfo(data).then(res=>{
+        this.$confirm('此操作将永久删除该用户信息, 是否继续?','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(()=>{
+          deleteCompanyinfo(data).then(res=>{
           if(res.success){
         // debugger
           this.$store.commit({
@@ -315,6 +373,14 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
           }
         
         })
+        }).catch(()=>{
+          this.$message({
+            type:"info",
+             message: '已取消删除'
+          })
+        })
+        //debugger
+        
        
       },
       handleEdit(index, row) {
@@ -352,7 +418,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     background-color: rgb(70, 70, 97) !important;
   }
   .el-tree-node.is-current > .el-tree-node__content {
-     background-color: rgb(70, 70, 97) !important;
+     background-color: rgb(130, 130, 138) !important;
   }
   
 .el-button--text {

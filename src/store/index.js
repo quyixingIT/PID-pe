@@ -10,7 +10,10 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_ROUTES(state, routes) {
-     // debugger
+      //debugger
+      console.log("1")
+      console.log(routes)
+      //debugger
       // 动态配置路由
       setAsyncRoutes(routes);
       // 为了防止用户刷新页面导致动态创建的路由失效，将其存储在本地中
@@ -20,6 +23,7 @@ export default new Vuex.Store({
       sessionStorage.setItem('menu', JSON.stringify(routes));
       // 将路由存储在 store 中
       state.routes = routes;
+      //debugger
      // let b=state.routes
        //state.routes.push(routes);
      // let a=state.routes
@@ -31,7 +35,17 @@ export default new Vuex.Store({
       //debugger
       state.menu=payload.payload
      
-    }
+    },
+   //清空
+      USER_SIGNOUT(state,p){
+        //debugger
+        let routes=state.routes
+        let menu=state.menu
+        routes=p
+        menu=p
+
+      }
+      
   },
   actions: {
     // async addRoutes({commit,state}){

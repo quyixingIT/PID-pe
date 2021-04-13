@@ -1,75 +1,37 @@
 <!-- 总览页面 -->
 <template>
-    <div class="contentSum">
+    <div class="contentSum" v-scrollBar  style="overflow:auto;position:relative">
       <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="总览" name="first">总览</el-tab-pane>
     <el-tab-pane label="分类总览" name="second">分类总览</el-tab-pane>
     
   </el-tabs> -->
-    <div class="contentFirst">
-        <!-- ------------------表格部分-------------------------------------- -->
-      <div class="tableContent" ref="tableCot">
-        <!-- :header-cell-style="tableHeaderColor" -->
-    <el-table
-    :data="tableData"
-    style="width: 100%"
-     :cell-class-name="tableCellClassName"
-     
-     >
-    <!-- :row-class-name="tableRowClassName"  -->
    
-      <el-table-column
-      label="回路类型"
-      prop="0"
-     >  
-    </el-table-column>
-   
-    
-    <el-table-column
-    prop="1"
-      label="评价等级"
-     >
-    </el-table-column>
-    <el-table-column
-  
-     prop="2"
-      label="投运率">
-        
-    </el-table-column>
-  
-    <el-table-column
-     prop="3"
-      label="综合评分">
-    </el-table-column>
-  </el-table>
-</div>
-  <!-- 表格结尾---------------------------- ----------------------------------------->
-    </div>
     <!--- 第二部分 echarts------------------------------->
-    <div class="contentFive" >
-      <cylinder id="cylinder1" class="cylinder1" title="操作数" :item="operationNum"></cylinder>
+    <div class="content1" >
+      <cylinder id="cylinder1" class="cylinder1" title="变差回路个数" :item="operationNum"></cylinder>
       <cricle id="cylinder2" class="cylinder2" title="总回路数" :item="loopsTotal"></cricle>
-      <cylinder id="cylinder3" class="cylinder3" title="平均操作数" :item="avgOperationNum"></cylinder>
+      <cylinder id="cylinder3" class="cylinder3" title="总操作数" :item="avgOperationNum"></cylinder>
     </div>
      <!--- 第三部分 echarts------------------------------->
-    <div class="contentSecond">
-        <mycharts v-if="flag" id="echarts1" title="投运率" :item="echartsdata1" :dataTime="axis"></mycharts>
-        <mycharts v-if="flag" id="echarts2" title="综合评分" :item="echartsdata2" :dataTime="compositeScoreTimeWeek"></mycharts>
+    <div class="content2">
+        <mycharts v-if="flag" id="echarts1" title="投用率" :item="echartsdata1" :dataTime="axis"></mycharts>
+        <mycharts v-if="flag" id="echarts2" title="总操作数" :item="echartsdata2" :dataTime="axis"></mycharts>
     </div>
     <!------ 第三部分echarts结尾  ---------------------------------------------------- -->
      <!------ 第四部分echarts开头  ---------------------------------------------------- -->
-   <div class="contentThree">
+   <!-- <div class="contentThree">
        <cumlateecharts v-if="flag" :Ydata="echartsShift" :data="echartsShiftData"></cumlateecharts>
-   </div>
+   </div> -->
     <!--- 第5部分 echarts------------------------------->
-   <div class="contentFour">
+   <div class="content3" v-scrollBar>
        <template>
     <el-table
       :data="tableData1"
       style="width: 100%">
       <el-table-column
         prop="0"
-        label="名称"
+        label="回路类型"
        >
       </el-table-column>
       <el-table-column
@@ -77,27 +39,63 @@
         label="回路数"
        >
       </el-table-column>
-      <el-table-column
+       <el-table-column
         prop="2"
-        label="优（%）">
+        label="投用率(%)">
       </el-table-column>
        <el-table-column
         prop="3"
+        label="有效投用率（%）">
+      </el-table-column>
+       <el-table-column
+        prop="4"
+        label="平稳率">
+      </el-table-column>
+      <el-table-column
+        prop="5"
+        label="振荡指数">
+      </el-table-column>
+       <el-table-column
+        prop="6"
+        label="Mode平均操作数">
+      </el-table-column>
+       <el-table-column
+        prop="7"
+        label="SP平均操作数">
+      </el-table-column>
+      <el-table-column
+        prop="8"
+        label="OP平均操作数">
+      </el-table-column>
+       <el-table-column
+        prop="9"
+        label="总平均操作数">
+      </el-table-column>
+       <el-table-column
+        prop="10"
+        label="OP行程">
+      </el-table-column>
+      <el-table-column
+        prop="11"
+        label="优（%）">
+      </el-table-column>
+       <el-table-column
+        prop="12"
         label="良（%）"
        >
         </el-table-column>
         <el-table-column
-        prop="4"
+        prop="13"
         label="中（%）"
        >
         </el-table-column>
         <el-table-column
-        prop="5"
+        prop="14"
         label="差（%）"
        >
         </el-table-column>
         <el-table-column
-        prop="6"
+        prop="15"
         label="开环（%）"
        >
         </el-table-column>
@@ -149,7 +147,7 @@ computed: {},
 watch: {
  
  "$route":function(to,from){
-  // debugger
+  debugger
    let index=sessionStorage.getItem('index')
    this.getsumdataList(index)
    //from 对象中包含当前地址
@@ -163,108 +161,19 @@ watch: {
 //方法集合
 methods: {
   getsumdataList(index){
-    
+   // debugger
     // index=localStorage.getItem('index')
    // debugger
     sumdatalist(index).then(res=>{
       if(res.success){
- if(res.ratioLegend !==null){
-        console.log(res)
-        //debugger
-          const format=function(arr){
-          let obj ={}
-          arr.map((item,index)=>{
-            obj[index] =item
-          })
-          return obj
-        }
-        const run=function(arr){
-          let result =[]
-          arr.map((item)=>{
-            result.push(format(item))
-          })
-          return result
-        }
-        this.tableData=run(res.tableSum)
-       
-         this.tableData1=run(res.table)
-        //给echats横坐标赋值
-        this.flag=true //通知echarts组件开始渲染
-           
-       // this.echartsdata1=res.compositeScore
-      // debugger
-       //综合评分
-       this.echartsdata2=[]
-      let compositeScore=res.compositeScoreWeek
-     // let compositeScoreMain=res.compositeScoreMain
-      let compositeScoreLegend=res.compositeScoreLegend
-     // this.compositeScoreTimeWeek=res.compositeScoreTimeWeek[0]
-     this.compositeScoreTimeWeek=res.timeWeek
-      this.echartsdata2.push(compositeScore)
-       this.echartsdata2.push(compositeScoreLegend)
-       const a=this.echartsdata2
-       //投运率
-       this.echartsdata1=[]
-         let ratio=res.ratioWeek
-       let ratioMain=res.ratioLegend
-       // this.axis=res.assessTimeWeek[0]   
-       this.axis=res.timeWeek 
-       this.echartsdata1.push(ratio)
-       this.echartsdata1.push(ratioMain)
-       const b=this.echartsdata1
-       // this.echartsdata2=res.ratio
-  //回路总数
-  //debugger
-  this.loopsTotal=res.loopsTotal
-  //平均操作数
-  this.avgOperationNum=res.avgOperationNum
-  //操作数
-  this.operationNum=res.operationNum
-        //处理第三部分的echcarts数据
-        let arrResult=[] //获取纵坐标
-        let shiftResult
-        for(let i=0;i<res.table.length;i++){
-         shiftResult= res.table[i].shift()
-         arrResult.push(shiftResult)
-        }
-        console.log(arrResult)
-        this.echartsShift=arrResult
-        //debugger
-       // this.echartsShiftData=res.table
-        //抽离数据
-        this.echartsShiftData= this.trans(res.table)
-         //debugger
-        //   const arrShift= res.table
-        //  const arrShiftResult
-        //  arrShift.forEach(element => {
-        //    console.log(element)
-        //  //arrShiftResult= element.shift()
-        //  });
-         // console.log(arrShiftResult)
-        //  console.log(res.table)
-         //console.log(this.echartsdata)
-        
-        //console.log(this.tableData)
-        // let arr=[]
-        // for(let i=0;i<this.tableData.length;i++){
-        //   for(let j=0;j<this.tableData[i].length;j++){
-        //     arr.push({})
-        //   }
-        // }
-      }else{
-        this.flag=false
-        this.echartsdata1=[],//echarts组件折线图数据
-      this.axis=[],
-      this.echartsdata2=[],//echarts组件折线图数据
-      this.tableData= [],
-     this. tableData1=[],
-     this. echartsShift=[],//第三部分echarts的横坐标
-      this.echartsShiftData=[],
-      this.avgOperationNum=0,
-      this.loopsTotal=0,
-      this.operationNum=0
-         this.$message.warning('暂无数据，请先上传数据！');
-      }
+        this.flag=true
+        this.loopsTotal=res.loopsTotal //总回路数
+        this.avgOperationNum=res.operationNum //总操作数
+        this.echartsdata1=res.ratioWeekTrend //投用率趋势
+        this.echartsdata2=res.operationNumTrend //总操作数趋势
+        this.axis=res.timeWeek     //横坐标时间
+        this.tableData1=res.table  //表格数据
+        this.operationNum=res.loopsBadNum //变差回路个数
       }else{
  this.$message.error(res.msg);
       }
@@ -317,7 +226,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
- // debugger
+  //debugger
   let index=sessionStorage.getItem('index') // debugger
   if(!index){
     let menu=JSON.parse(sessionStorage.getItem('menu'))
@@ -391,38 +300,30 @@ background-color: rgba(148, 144, 144, 0.3)
 .contentSum{
     width: 100%;
     height:100%;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; */
     /* background:url('../../assets/img/backgroundimg.png') no-repeat;
     background-size: cover; */
 }
-.contentFirst{
-width: 100%;
-height: 10%;
-overflow: auto;
-/* background-color: rebeccapurple; */
-}
-.contentSecond{
+
+.content2{
     width: 100%;
-    height:30%;
+    height:40%;
     /* background-color: rosybrown; */
     display: flex;
 }
-.contentThree{
+
+.content3{
     width:100%;
-    height:20%;
-    /* background-color:forestgreen; */
-}
-.contentFour{
-    width:100%;
-    height:15%;
+    height:30%;
     overflow: auto;
+    position:relative
     /* background-color: hotpink; */
 }
-.contentFive{
+.content1{
   width: 100%;
-  height:25% ;
+  height:30% ;
   display: flex;
   flex-direction:row ;
   /* background-color: azure; */

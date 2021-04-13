@@ -23,7 +23,7 @@ props:["id","title",'item'],
 watch: {
 	 item:{
     handler(newVal,oldVal){
-      debugger
+      //debugger
       let value=newVal
       //arry.push(newVal[0],[newVal[1]])
      // let arry=value.splice(2)
@@ -38,7 +38,10 @@ watch: {
 //方法集合
 methods: {
  my_charts(item){
-        // let dataTime=this.item[0].datatime //横坐标数据
+	 if(item==null){
+		 
+	 }else{
+ // let dataTime=this.item[0].datatime //横坐标数据
         // let data1=this.item[0].data1 //数据1
         // let data2=this.item[0].data2 //数据2
         // const title=["投运率","综合评分"]
@@ -52,7 +55,10 @@ methods: {
 		var color="#19dfdd";
 		var shadowColor="#0b5767";
 		var barWidth=80;
-         
+		//debugger
+         if(yData[0]==0){
+			 yData.splice(0,1,10.1)
+		 }
     
     //  const a=this.item[0]
     //  const b=this.item
@@ -121,9 +127,14 @@ methods: {
 							"position": "top",
 							fontSize: 14,
 							color: color,
-							// formatter:function(params,index){
-							// 	return params.value+"%";
-							// }
+							formatter:function(params,index){
+								if(params.value==10.1){
+									return 0
+								}else{
+									return params.value;
+								}
+								
+							}
 						}
 					},
 					color: "#2DB1EF",
@@ -164,10 +175,22 @@ methods: {
       if (options && typeof options === "object") {
         myCharts.setOption(options, true);
         window.addEventListener("resize", () => { myCharts.resize();});
-       
+		if(this.title=="变差回路个数"){
+		 myCharts.getZr().on('click', params => {
+          let pointInPixel = [params.offsetX, params.offsetY]
+          if (myCharts.containPixel('grid', pointInPixel)) {
+            let xIndex = myCharts.convertFromPixel({ seriesIndex: 0 }, [params.offsetX, params.offsetY])[0]
+            console.log(xIndex)
+			 console.log("点击事件")
+          }
+        })
+		}
+      
     
     }
     }
+	 }
+       
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {

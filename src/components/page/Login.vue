@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">华理自动化控制资产管理平台</div>
+            <div class="ms-title">华理自动化控制资产管理平台V1.0</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item  prop="username" >
                     <el-input v-model="param.username" placeholder="username">
@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips"  style="cursor: pointer" @click="ZCmethods">注册</p>
+                <!-- <p class="login-tips"  style="cursor: pointer" @click="ZCmethods">注册</p> -->
             </el-form>
         </div>
         <el-dialog title="注册" :visible.sync="dialogFormVisible">
@@ -283,7 +283,7 @@ export default {
                   var loginTime = aData.getFullYear() + "-" + (aData.getMonth() + 1) + "-" + aData.getDate();
                   localStorage.setItem('loginTime',loginTime)
         if(res.success){
-            debugger
+            //debugger
             //  登录接口调用后，调用路由接口，后端返回相应用户的路由res.router，我们需要存储到store中，方便其他地方拿取
            // that.$store.commit('SET_ROUTES', menu);
             that.$store.commit('SET_ROUTES', res.routerInfoList);
@@ -293,6 +293,7 @@ export default {
     //that.$store.dispatch("addRoutes", routerList);
      localStorage.setItem('ms_username', that.param.username);
      localStorage.setItem('token', res.token);
+     //debugger
                  this.$router.push('/');
     // var username=localStorage.getItem('ms_username')
     // this.$store.commit('saveuserName',username)
@@ -303,7 +304,7 @@ export default {
         }
 
                     }).catch(function (error) {
-                         console.log(this)
+                         //console.log(this)
                         that.$message.error('登录失败');
                         console.log(error);
                     });
@@ -336,12 +337,12 @@ export default {
             const userInfoStr=JSON.stringify(that.ruleForm)
               console.log(userInfoStr);
             this.$refs[formName].validate((valid) => {
-                debugger
+                //debugger
                 if (valid) {
                               
                   register(userInfoStr).then(res=>{
                         if(res.success){
-                            debugger
+                           // debugger
                             that.$message({
                                 message: res.msg,
                                 type: 'success'

@@ -9,7 +9,7 @@ export default function request (option){
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
      baseURL: 'http://192.168.1.113:1008',//本机
-    //baseURL: 'http://192.168.1.180:2001', ///服务器
+    //baseURL: 'http://192.168.1.180:6001', ///服务器
      timeout: 50000
 });
  //定义响应动画
@@ -49,7 +49,7 @@ export default function request (option){
    // 2.某些请求要求用户必须登录, 判断用户是否有token, 如果没有token跳转到login页面
           //window.localStorage.getItem("accessToken") 获取token的value
           let token = window.localStorage.getItem("token")
-    
+            //debugger
           if (token) {
           //将token放到请求头发送给服务器,将tokenkey放在请求头中
           //Authorization 要与后台对应起来

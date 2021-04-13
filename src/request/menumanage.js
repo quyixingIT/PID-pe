@@ -6,9 +6,12 @@ export function getMenu(){
     })
 }
 /** 获取用户信息 */
-export function getUsers(){
+export function getUsers(objStr){
     return axios({
-        url:'/api/UserInfo/getUserInfoList'
+        url:'/api/UserInfo/getUserInfoListByPaged',
+        params:{
+            objStr
+        }
     })
 }
 /** 获取用户管理中下拉框中的角色信息 */
@@ -18,20 +21,22 @@ export function getSelectRole(){
     })
 }
 /** 更新用户管理中的行更新 */
-export function updataUser(userInfoStr){
+export function updataUser(userInfoStr,str){
     return axios({
         url:"api/UserInfo/updateUserInfo",
         params:{
             userInfoStr,
+            str
         }
     })
     }
     /** 新增用户之后 更新行*/
-    export function adduserUpdate(userInfoStr){
+    export function adduserUpdate(userInfoStr,str){
       return axios({
         url:"api/UserInfo/addUserInfo",
         params:{
             userInfoStr,
+            str
         }
       })
     }
@@ -75,6 +80,33 @@ export function updataUser(userInfoStr){
             url:'api/CompanysInfo/updateCompanysInfo',
             params:{
                 str,
+            }
+        })
+    }
+    /** 回路管理 */
+    export function getloopinfo(objStr){
+        return axios({
+            url:'api/LoopInfo/getLoopsInfoList',
+            params:{
+                objStr,
+            }
+        })
+    }
+    /** 回路管理删除 */
+    export function deleloopinfo(loopInfoStr){
+        return axios({
+            url:'api/LoopInfo/deleteLoopsInfo',
+            params:{
+                loopInfoStr,
+            }
+        })
+    }
+    /**日志管理 */
+    export function getlogList(objStr){
+        return axios({
+            url:'api/OperationLog/getOperationLogListByPage',
+            params:{
+                objStr,
             }
         })
     }

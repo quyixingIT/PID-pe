@@ -21,7 +21,7 @@ export const getAsyncRoutes = arr => {
       component: resolve => component === 'Home' ? require([`@/components/views/Home.vue`], resolve) : require([`@/components/views/${component}`], resolve)
     };
     if(children) {
-      
+      //debugger
       // 如果存在 children，使用递归，将 children 也处理成我们需要的格式，并绑定给父级路由
       route.redirect = children[0].path;
       route.children = getAsyncRoutes(children);
@@ -34,7 +34,7 @@ export const getAsyncRoutes = arr => {
 export const setAsyncRoutes = menu => {
    
   const _menu = getAsyncRoutes(menu);
-  
+  //debugger
   // 将处理好的动态配置的路由通过 vue 提供的方式添加到 router 中，注意这个 _menu 的格式是和配置路由时的键 routes 一样格式的数组
   router.addRoutes(_menu);
   //router.addRoutes(menu);
@@ -43,5 +43,7 @@ export const setAsyncRoutes = menu => {
   const c= router.options.routes
  // router.options.routes = defaultRoutes.concat(menu);
  router.options.routes = defaultRoutes.concat(_menu);
+
   const b= router.options.routes
+   debugger
 };

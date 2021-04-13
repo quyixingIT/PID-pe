@@ -26,6 +26,7 @@
   <br/>
   <!-- 本机 -->
  <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=quota"'>
+ <!-- <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=quota"'> -->
     <el-button size="small" type="primary">下载模板<i class="el-icon-download el-icon--right"></i></el-button>
 
   </el-link>
@@ -37,7 +38,11 @@
   <!-- 增减间隙 -->
   <el-button type="text"></el-button>
  
-  <el-button size="small" type="primary" @click="uploadFile">上传文件<i class="el-icon-upload el-icon--right"></i></el-button>
+  <el-button v-show="btshow" size="small" type="primary" @click="uploadFile(1)">保存<i class="el-icon-upload el-icon--right"></i></el-button>
+<!-- 增减间隙 -->
+  <el-button type="text"></el-button>
+ 
+  <el-button v-show="btshow" size="small" type="warning" @click="canceluploadFile()">取消<i class="el-icon-upload el-icon--right"></i></el-button>
 <div class="tableStyle">
   <!-- :row-class-name="tableRowClassName" -->
   <!-- 行变色 -->
@@ -62,6 +67,22 @@
     <el-table-column
       prop="LoopType"
       label="回路类型">
+    </el-table-column>
+    <el-table-column
+      prop="CompanysName"
+      label="企业">
+    </el-table-column>
+    <el-table-column
+      prop="FactorysName"
+      label="工厂">
+    </el-table-column>
+    <el-table-column
+      prop="DevicesName"
+      label="装置">
+    </el-table-column>
+    <el-table-column
+      prop="UnitsName"
+      label="单元">
     </el-table-column>
     <!-- <el-table-column
       prop="PV"
@@ -100,7 +121,7 @@
         >
        <template slot-scope="scope">
      <span v-if="scope.row.OPIsEnable===0">{{scope.row.OP}}</span>
-        <span v-else style="color: red">{{scope.row.OP}}</span>
+     <span v-else style="color: red">{{scope.row.OP}}</span>
  </template>
     </el-table-column>
     <!-- <el-table-column
@@ -137,7 +158,9 @@ return {
     fileData:'' , // csv文件列表
     progressPercent:0,
     progressFlag: true,
-     tableData: []
+     tableData: [],
+     file:null,
+     btshow:false,
 };
 },
 //监听属性 类似于data概念
@@ -191,22 +214,46 @@ methods: {
     //    // 因为action参数是必填项，我们使用二次确认进行文件上传时，直接填上传文件的url会因为没有参数导致api报404，所以这里将action设置为一个返回为空的方法就行，避免抛错
     //     return ""
     //   },
-      uploadFile() {
-        let aa=this.dataId
+    // 文件取消
+    canceluploadFile(){
+      this.$confirm("是否确认取消保存？","提示",{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        type: 'warning'
+          }).then(()=>{
+            this.btshow=false
+            this.tableData=[]
+             this.$message({
+                        type: 'success',
+                        message: '已取消保存'
+                    });
+          }).catch(()=>{
+             this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+          })
+    },
+      uploadFile(flag) {
+        let aa=this.file
         debugger
-        if (this.$refs.upload.uploadFiles.length ===0){
+if(flag==0){
+   if (this.$refs.upload.uploadFiles.length ===0){
           this.$message.warning('请上传文件');
         }else {
-            let file = this.$refs.upload.uploadFiles.pop().raw;//这里获取上传的文件对象
-            
+            //let file = this.$refs.upload.uploadFiles.pop().raw;//这里获取上传的文件对象
+            this.file = this.$refs.upload.uploadFiles.pop().raw;//这里获取上传的文件对象
+            //let file = this.$refs.upload.uploadFiles[this.$refs.upload.uploadFiles.length-1].raw;
             this.fileData = new FormData();
             this.$refs.upload.submit()
+            
            // let file=this.$refs.upload.fileList
            
          
           //let a=form.get(file)
-          this.fileData.append('file', file);
+          this.fileData.append('file', this.file);
          this.fileData.append('deviceID',this.dataId)
+         this.fileData.append('flag',flag)
              let config ={
             onUploadProgress:ProgressEvent =>{
               let progressPercent =(ProgressEvent.loaded / ProgressEvent.total *100 | 0)
@@ -217,11 +264,67 @@ methods: {
             res=>{
              this.tableData= res.data.loopInfoList
               console.log(res)
-             this.$message.success(res.data.msg);
+             this.$message.success("选择成功,请核实！");
+             //this.btnshow=true;
+
             },err =>{
             console.log(err)
             });
        }
+}else{
+  this.fileData = new FormData();
+            this.$refs.upload.submit()
+           // let file=this.$refs.upload.fileList
+           
+         
+          //let a=form.get(file)
+          this.fileData.append('file', this.file);
+         this.fileData.append('deviceID',this.dataId)
+         this.fileData.append('flag',flag)
+             let config ={
+            onUploadProgress:ProgressEvent =>{
+              let progressPercent =(ProgressEvent.loaded / ProgressEvent.total *100 | 0)
+              this.progressPercent=progressPercent
+            }
+          }
+          let msg="是否确认保存？"
+          let tableList=this.tableData
+          if(tableList.length !==0){
+            tableList.map((item,index)=>{
+              if(item.PVIsEnable==1){
+                msg="部分回路信息有误,是否确认保存？"
+
+              }
+            })
+          }
+          this.$confirm(msg,'提示',{
+            confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+          }).then(()=>{
+              LoopInfo(this.fileData,config).then(
+            res=>{
+             this.tableData= res.data.loopInfoList
+              console.log(res)
+              this.btshow=false
+              if(res.data.success){
+                  this.$message.success(res.data.msg);
+              }else{
+                 this.$message.error(res.data.msg);
+              }
+           
+            },err =>{
+            console.log(err)
+            });
+          }).catch(()=>{
+             this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+          })
+     
+}
+       
       },
       // requestFile(file){
       //   debugger
@@ -290,4 +393,44 @@ mounted() {
   .el-table .success-row {
     background: #f0f9eb;
   }
+  .el-table{
+/* 表格字体颜色 */
+color:white;
+/* 表格边框颜色 */
+/* border: 0.5px solid #758a99; */
+/* height: 500px; */
+}
+/* 表格内背景颜色 */
+.el-table th, .el-table tr,.el-table td{
+border: 0;
+background-color: transparent;
+}
+
+/* 使表格背景透明 */
+/* .el-table th, .el-table tr {
+background-color: transparent;
+} */
+.el-table, .el-table__expanded-cell {
+    background-color: transparent;
+}
+
+.el-table th, .el-table tr {
+    background-color: transparent;
+}
+.el-table th{
+  background-color: transparent !important;
+}
+/* 表格表头字体颜色 */
+.el-table thead {
+color: white;
+font-weight: 500;
+background-color: rgba(148, 144, 144, 0.3)
+}
+/**鼠标悬浮颜色 */
+.el-table__body tr:hover > td{
+    background-color:rgb(127, 147, 177) !important;
+}
+ .el-table__header-wrapper thead :hover{
+     background-color: rgb(127, 147, 177) !important;
+} 
 </style>

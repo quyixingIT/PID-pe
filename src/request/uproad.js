@@ -14,14 +14,16 @@ export function uproad(form,config){
 //     })
     let token = window.localStorage.getItem("token")    
     let axiosConfig ={
+        //本机
         url:"http://192.168.1.113:1008/api/LoopInfo/offLineLoop",
-      // url:"http://192.168.1.180:2001/api/LoopInfo/offLineLoop",
+       //服务器
+      // url:"http://192.168.1.180:6001/api/LoopInfo/offLineLoop",
         method:'post',
         data:form,
         headers: { 'Content-Type': 'multipart/form-data','Authorization':token }
     }
     if(config instanceof Object){
-        debugger
+        //debugger
         for(let key in config){
             axiosConfig[key] =config[key]
         }
@@ -34,8 +36,10 @@ export function uproad(form,config){
 export function onLineLoop(form,config){
     let token = window.localStorage.getItem("token")    
     let axiosConfig ={
+        //本机
         url:"http://192.168.1.113:1008/api/LoopInfo/onLineLoop",
-       //url:"http:// 192.168.1.180:2001/api/LoopInfo/onLineLoop",
+        //服务器
+       //url:"http://192.168.1.180:6001/api/LoopInfo/onLineLoop",
         method:'post',
         data:form,
         headers: { 'Content-Type': 'multipart/form-data','Authorization':token }
@@ -53,11 +57,13 @@ export function onLineLoop(form,config){
     }
     /** 数据源管理中的指标数据上传 */
 export function LoopInfo(form,config){
-    debugger
+    //debugger
     let token = window.localStorage.getItem("token")    
     let axiosConfig ={
+        //本机
         url:"http://192.168.1.113:1008/api/LoopInfo/importLoopInfo",
-       //url:"http:// 192.168.1.180:2001/api/LoopInfo/importLoopInfo",
+        //服务器
+      // url:"http://192.168.1.180:6001/api/LoopInfo/importLoopInfo",
         method:'post',
         data:form,
         headers: { 'Content-Type': 'multipart/form-data','Authorization':token }

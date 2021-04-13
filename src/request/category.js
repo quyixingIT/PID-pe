@@ -10,7 +10,8 @@ export function tabledatalist(objStr){
 //日报 评估结果数据
 export function dayResport(loopName){
     return axios({
-        url:'/api/LoopAssess/onAccessResult',
+        //url:'/api/LoopAssess/onAccessResult',
+        url:'/api/LoopAssess/dailyReport',
         params:{
             loopAssessID:loopName
         }
@@ -28,7 +29,7 @@ export function Op_Trend(loopName){
 //总览页面接口
 export function sumdatalist(index){
     return axios({
-        url:'/api/LoopAssess/summarize',
+        url:'/api/LoopAssess/newSummarize',
         params:{
             index:index
         }

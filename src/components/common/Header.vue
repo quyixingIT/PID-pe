@@ -6,7 +6,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">华理自动化控制资产管理平台软件V1.0</div>
+        <div class="logo">马钢化工苯加氢PID评估软件V1.0</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -31,7 +31,7 @@
                 <!-- </div> -->
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../../assets/img/hlauto.jpg" />
+                    <img src="../../assets/img/masteel.png" />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -41,9 +41,12 @@
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <!--<a href="https://github.com/lin-xin/vue-manage-system" target="_blank">-->
-                            <el-dropdown-item command="changePwd">修改密码</el-dropdown-item>
+                         <el-dropdown-item divided command="about">关于</el-dropdown-item>
+                            <el-dropdown-item divided command="changePwd">修改密码</el-dropdown-item>
                         <!--</a>-->
+                       
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -81,10 +84,47 @@
                 <!--<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
             <!--</div>-->
         </el-dialog>
+        <el-dialog
+  title="关于PID评估软件"
+  :visible.sync="dialogFlag"
+  width="32%"
+  >
+  <div class="dialogContent">
+
+<p class="">产品版本号:{{version}}</p>
+<p class="">授权回路个数:{{authorizeNum}}个</p>
+<p class="">授权装置:{{authorizeName}}</p>
+
+  <p style="font-weight:bold">马钢化工苯加氢PID评估软件软件许可条款</p>
+  <div style="height:90%">
+    
+      <div class="pContent">
+            <p>请注意：使用该软件时，需遵守以下条款和条件。例如：</p>
+          <!-- <p>如果您是批量许可用户，使用该软件应遵守批量许可协议。</p> -->
+       
+          <p>如果您未从上海华理自动化或其授权分销商购买有效许可证，则不得使用该软件。</p>
+          <p>
+              本公司向用户提供的服务均是在依"现状"提供，本公司在此明确声明对本服务不作任何明示或暗示的保证，包括但不限于对服务的可适用性、准确性、及时性、可持续性等。
+</p>
+<p>用户不得利用本服务进行任何有损本公司及其关联企业之权利、利益及商誉，或其他用户合法权利之行为。</p>
+<p>用户不得从事任何利用本公司平台系统漏洞进行有损其他用户、本公司或互联网安全的行为。</p>
+      </div>
+      <p style="font-size:12px">警告：本软件受版权法和国际公约的保护。如未经授权而擅自复制或传播本程序或其中的任何部分，将受到严厉的民事及刑事制裁，还将在法律许可的范围内受到最大程度的起诉。</p>
+  </div>
+  
+  
+  </div>
+  <span slot="footer" class="dialog-footer">
+   
+    <el-button type="primary" @click="dialogFlag = false">确 定</el-button>
+  </span>
+</el-dialog>
     </div>
 </template>
 <script>
 import bus from '../common/bus';
+import {Editpw} from '../../request/menumanage'
+import {getLisence} from '../../request/login'
 //import PDF from '../common/VuePDF'
 export default {
     // components: {PDF},
@@ -131,6 +171,10 @@ export default {
             name: 'linxin',
             message: false,
             dialogFormVisible: false,
+            dialogFlag:false,
+            authorizeNum:'',
+            authorizeName:'',
+            version:'',
             // form: {
             //     name: '',
             //     region: '',
@@ -201,36 +245,40 @@ export default {
                // this.$store.commit('USER_SIGNOUT',null)
                 this.$router.push('/login');
                    location.reload()
+            }else if(command=="about"){
+                this.dialogFlag=true
             }else {
 
                 this.dialogFormVisible=true
+
 
             }
         },
         submitForm(formName) {
             var userName= localStorage.getItem('ms_username')
             var that=this;
-           //debugger
+          // debugger
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        //debugger
+                       // debugger
                         // alert('submit!');
-                        that.$axios.get('UserInfo/updatePassword',{
-                            params: {
-                                userName:userName,
-                                oldPwd:that.ruleForm.oldPwd,
-                                newPwd:that.ruleForm.pass
-                            }
-                        }).then(res=> {
+                        // that.$axios.get('UserInfo/updateUserPwd',{
+                        //     params: {
+                        //         //userName:userName,
+                        //         oldPwd:that.ruleForm.oldPwd,
+                        //         newPwd:that.ruleForm.pass
+                        //     }
+                        // })
+                        Editpw(that.ruleForm.oldPwd,that.ruleForm.pass).then(res=> {
                             //debugger
                             //console.log(res)
                             if (res.success) {
-                                that.$message.success('修改成功');
+                                that.$message.success(res.msg);
                                 that.dialogFormVisible = false
                                 localStorage.removeItem('ms_username');
                                 that.$router.push('/login');
                             }else {
-                                that.$message.error('修改失败');
+                                that.$message.error(res.msg);
                             }
 
 
@@ -313,12 +361,44 @@ export default {
                 }
             }
             this.fullscreen = !this.fullscreen;
-        }
+        },
+          getdev() {
+              getLisence().then(res=>{
+                  console.log(res)
+        this.authorizeNum=res.loopNum //授权回路个数
+        this.authorizeName=res.device //授权装置名称
+        this.version=res.version//系统版本号
+              }).catch(err=>{
+                  console.log(err)
+              })
+              //debugger
+        //  更新数据devInfo.lic文件接口      
+    //     let xhr = new XMLHttpRequest(),
+    //     okStatus = document.location.protocol === "file:" ? 0 : 200;
+    //     xhr.open('GET', '/license.txt', false);// 文件路径
+    //     xhr.overrideMimeType("text/html;charset=utf-8");//默认为utf-8
+    //     xhr.send(null);
+    //     console.log(xhr.responseText); //打印文件信息
+    //      //console.log(xhr.responseText)
+    //      var str=xhr.responseText
+    //      //var authorizeNum,authorizeName,version;
+  
+
+    //    var arr =str.trim().split('\r\n')
+    //     //console.log(arr[0])
+    //     this.authorizeNum=arr[0] //授权回路个数
+    //     this.authorizeName=arr[3] //授权装置名称
+    //     this.version=arr[2] //系统版本号
+
+//console.log(version)
+//console.log(authorizeName)
+    },
     },
     mounted() {
         if (document.body.clientWidth < 1500) {
             this.collapseChage();
         }
+    this.getdev()
     }
 };
 </script>
@@ -402,5 +482,13 @@ export default {
 }
 .el-dropdown-menu__item {
     text-align: center;
+}
+.dialogContent{
+    height: 300px;
+    padding: 0 5px;
+}
+.pContent{
+    height: 70%;
+    border:2px solid gray
 }
 </style>

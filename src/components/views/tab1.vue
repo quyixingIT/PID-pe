@@ -1,6 +1,6 @@
 <!-- 总览页面 -->
 <template>
-    <div class="contentSum" v-scrollBar  style="overflow:auto;position:relative">
+    <div id="pdfDom" class="contentSum">
       <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="总览" name="first">总览</el-tab-pane>
     <el-tab-pane label="分类总览" name="second">分类总览</el-tab-pane>
@@ -9,24 +9,36 @@
    
     <!--- 第二部分 echarts------------------------------->
     <div class="content1" >
-      <cylinder id="cylinder1" class="cylinder1" title="变差回路个数" :item="operationNum"></cylinder>
-      <cricle id="cylinder2" class="cylinder2" title="总回路数" :item="loopsTotal"></cricle>
-      <cylinder id="cylinder3" class="cylinder3" title="总操作数" :item="avgOperationNum"></cylinder>
+      <!-- <cylinder id="cylinder1" class="cylinder1" title="变差回路个数" :item="operationNum"></cylinder> -->
+     <cricle id="cylinder1" class="cylinder1" style="width:20%;height:100%" title="劣势回路个数" :item="operationNum" :allloop="loopsTotal"></cricle>
+      <mycharts v-if="flag" id="echarts1" class="mycharts" style="width:80%;height:100%" title="投用率" :item="echartsdata1" :dataTime="axis"></mycharts>
+      <!-- <cricle id="cylinder2" class="cylinder2" title="总回路数" :item="operationNum" :allloop="perfor"></cricle> -->
+      <!-- <cylinder id="cylinder3" class="cylinder3" title="总操作数" :item="avgOperationNum"></cylinder> -->
     </div>
      <!--- 第三部分 echarts------------------------------->
     <div class="content2">
-        <mycharts v-if="flag" id="echarts1" title="投用率" :item="echartsdata1" :dataTime="axis"></mycharts>
-        <mycharts v-if="flag" id="echarts2" title="总操作数" :item="echartsdata2" :dataTime="axis"></mycharts>
+      <cricle id="cylinder2" class="cylinder2" title="总回路数" style="width:20%;height:100%" :item="loopsTotal" :allloop="perfor"></cricle>
+        <!-- <mycharts v-if="flag" id="echarts1" title="投用率" :item="echartsdata1" :dataTime="axis"></mycharts> -->
+        <mycharts v-if="flag" id="echarts2" title="总操作数" style="width:80%;height:100%" :item="echartsdata2" :dataTime="axis"></mycharts>
     </div>
-    <!------ 第三部分echarts结尾  ---------------------------------------------------- -->
-     <!------ 第四部分echarts开头  ---------------------------------------------------- -->
+    <!------ 第三部分echarts结尾   -------------------------------------------------- -->
+     <!------ 第四部分echarts开头  ----------------------------------------------------- -->
    <!-- <div class="contentThree">
        <cumlateecharts v-if="flag" :Ydata="echartsShift" :data="echartsShiftData"></cumlateecharts>
    </div> -->
     <!--- 第5部分 echarts------------------------------->
-   <div class="content3" v-scrollBar>
-       <template>
-    <el-table
+   <div class="content3">
+     <div style="height:100%;">
+       <div style="height:15%">
+<el-button type="primary" icon="el-icon-c-scale-to-original" @click="seeDetail">{{hidden}}</el-button>
+     <el-button type="warning" icon="el-icon-printer" @click="getPDF()">导出PDF</el-button>
+       </div>
+       <div style="height:85%;overflow:auto;position:relative" v-scrollBar >
+            <template>
+            
+         <el-table
+    ref="table"
+    height="150"
       :data="tableData1"
       style="width: 100%">
       <el-table-column
@@ -45,62 +57,92 @@
       </el-table-column>
        <el-table-column
         prop="3"
-        label="有效投用率（%）">
+        label="投用有效率（%）">
+      </el-table-column>
+       <el-table-column
+        prop="16"
+        label="劣势回路个数"
+       >
+        </el-table-column>
+       <el-table-column
+        prop="9"
+        label="平均总操作数"
+       
+        >
       </el-table-column>
        <el-table-column
         prop="4"
         label="平稳率">
       </el-table-column>
+      
       <el-table-column
         prop="5"
         label="振荡指数">
       </el-table-column>
-       <el-table-column
+
+      <!-- <el-table-column :render-header="renderHeader"> -->
+ <el-table-column
         prop="6"
-        label="Mode平均操作数">
+        label="Mode平均操作数"
+        v-if=showOr
+        >
       </el-table-column>
        <el-table-column
         prop="7"
-        label="SP平均操作数">
+        label="SP平均操作数"
+        v-if=showOr
+        >
       </el-table-column>
       <el-table-column
         prop="8"
-        label="OP平均操作数">
+        label="OP平均操作数"
+        v-if=showOr
+        >
       </el-table-column>
-       <el-table-column
-        prop="9"
-        label="总平均操作数">
-      </el-table-column>
+      
        <el-table-column
         prop="10"
-        label="OP行程">
+        label="OP行程"
+        v-if=showOr
+        >
       </el-table-column>
       <el-table-column
         prop="11"
-        label="优（%）">
+        label="优（%）"
+        v-if=showOr
+        >
       </el-table-column>
        <el-table-column
         prop="12"
         label="良（%）"
+        v-if=showOr
        >
         </el-table-column>
         <el-table-column
         prop="13"
         label="中（%）"
+        v-if=showOr
        >
         </el-table-column>
         <el-table-column
         prop="14"
         label="差（%）"
+        v-if=showOr
        >
         </el-table-column>
         <el-table-column
         prop="15"
         label="开环（%）"
+        v-if=showOr
        >
         </el-table-column>
+      <!-- </el-table-column> -->
+      
     </el-table>
+   
   </template>
+   </div>  
+  </div>
    </div>
     </div>
 </template>
@@ -125,6 +167,9 @@ components: {
 data() {
 //这里存放数据
 return {
+    htmlTitle:'回路总览',
+    showOr:false,
+     hidden:"展开隐藏列",
       echartsdata1:[],//echarts组件折线图数据
       axis:[],
       echartsdata2:[],//echarts组件折线图数据
@@ -133,11 +178,13 @@ return {
       echartsShift:[],//第三部分echarts的横坐标
       echartsShiftData:[],//第三部分echarts的数据
       flag:false,
-      Height:250,
+      Height:300,
       compositeScoreTimeWeek:[],
       loopsTotal:null,
       avgOperationNum:null,
       operationNum:null,
+      perfor:[],//优良中差数组
+      infoStr:"",
        
 };
 },
@@ -147,7 +194,7 @@ computed: {},
 watch: {
  
  "$route":function(to,from){
-  debugger
+  //debugger
    let index=sessionStorage.getItem('index')
    this.getsumdataList(index)
    //from 对象中包含当前地址
@@ -166,7 +213,9 @@ methods: {
    // debugger
     sumdatalist(index).then(res=>{
       if(res.success){
+        //debugger
         this.flag=true
+        this.perfor=res.performenceValue// 优良中差指标
         this.loopsTotal=res.loopsTotal //总回路数
         this.avgOperationNum=res.operationNum //总操作数
         this.echartsdata1=res.ratioWeekTrend //投用率趋势
@@ -174,6 +223,7 @@ methods: {
         this.axis=res.timeWeek     //横坐标时间
         this.tableData1=res.table  //表格数据
         this.operationNum=res.loopsBadNum //变差回路个数
+        this.infoStr=res.infoStr //当前总览所处层集
       }else{
  this.$message.error(res.msg);
       }
@@ -185,6 +235,42 @@ methods: {
       console.log(err)
     })
   },
+//   renderHeader (h, column) {
+//     return h('div', [
+//             h('span', {
+//                 style: `cursor: pointer;`,
+//                 on: {
+//                     click: this.seeDetail
+//                 }
+//             }, '查看详情')
+           
+//         ]
+//     )
+// },
+getPDF(){
+    this.htmlTitle=this.infoStr+"下的总览"
+    //console.log( this.htmlTitle)
+   // let i=this.infoStr
+    //let t=this.htmlTitle
+    //debugger
+    this.getPdf(this.htmlTitle)
+  },
+seeDetail() {
+      this.showOr=!this.showOr
+      if( this.showOr){
+        this.hidden="还原"
+      }else{
+ this.hidden="展开隐藏列"
+      }
+       this.$nextTick(() => {
+          this.$refs.table.doLayout();
+        });
+    console.log('查看详情111')
+},
+seeHandle() {
+    console.log('查看待处理1111')
+},
+
   //js中获取多个数组中的同一索引值
   trans (arr){
     let result =[]
@@ -243,6 +329,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
+   
   //  const that = this
   //   window.onresize = () => {
   //     return (() => {
@@ -303,13 +390,13 @@ background-color: rgba(148, 144, 144, 0.3)
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    /* background:url('../../assets/img/backgroundimg.png') no-repeat;
-    background-size: cover; */
+     background:url('../../assets/img/backgroundimg.png') no-repeat;
+    background-size: cover; 
 }
 
 .content2{
     width: 100%;
-    height:40%;
+    height:35%;
     /* background-color: rosybrown; */
     display: flex;
 }
@@ -317,26 +404,32 @@ background-color: rgba(148, 144, 144, 0.3)
 .content3{
     width:100%;
     height:30%;
-    overflow: auto;
-    position:relative
+    /* overflow: auto;
+    position:relative */
     /* background-color: hotpink; */
 }
 .content1{
   width: 100%;
-  height:30% ;
+  height:35% ;
   display: flex;
   flex-direction:row ;
   /* background-color: azure; */
  
 }
 .cylinder1 {
-  width:30%;
+  width:20%;
   height: 100%;
+  /* background-color: red; */
   overflow: hidden;
 }
-.cylinder2{
-   width:40%;
+.mycharts{
+  /* width:80%; */
   height: 100%;
+}
+.cylinder2{
+   /* //width:50%; */
+  height: 100%;
+  /* background-color: salmon; */
    overflow: hidden;
 }
  .cylinder3{

@@ -18,3 +18,11 @@ export function register(registerInfo){
     })
   
 }
+//许可证信息
+export function getLisence(){
+    return axios({
+        url:'/api/Help/aboutMe',
+       
+    })
+  
+}

@@ -6,7 +6,7 @@
         border
          highlight-current-row
     :data="tableData"
-    style="width: 100%">
+    style="width:100%">
     
     <el-table-column
       prop="LoopName"

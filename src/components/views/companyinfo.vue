@@ -1,6 +1,6 @@
 <!-- 企业信息管理页面 -->
 <template>
-<div>
+<div class="companyinfo">
    
         <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
                        :page-sizes="[1,2,5,10]" :page-size="limit" layout="total, sizes, prev, pager, next, jumper"
@@ -350,7 +350,7 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
       },
 /** 删除 */
       remove(node, data) {
-        this.$confirm('此操作将永久删除该用户信息, 是否继续?','提示',{
+        this.$confirm('此操作将永久删除该资产, 是否继续?','提示',{
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
@@ -409,8 +409,9 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     },
   }
 </script>
-<style>
- .el-tree{
+<style lang="less">
+.companyinfo{
+.el-tree{
   background-color: transparent;
   color: aliceblue !important;
 }
@@ -433,4 +434,6 @@ import {getCompanyinfo,addCompanyinfo,deleteCompanyinfo,updateCompanyinfo} from 
     font-size: 14px;
     padding-right: 8px;
   }
+}
+ 
 </style>

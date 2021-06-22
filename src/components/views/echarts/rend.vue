@@ -121,6 +121,7 @@ markData=this.data.echartStyleListAll
     let sp=this.data.SP
     let pv=this.data.PV
     let dateTime=this.data.dateTime
+    
     let Min1=calMin([sp,pv]),Min2=calMin(op)
     let Max1=calMax([sp,pv]),Max2=calMax(op)
     let options = {
@@ -143,10 +144,10 @@ markData=this.data.echartStyleListAll
         transitionDuration:0
     },
          grid: {
-        left: '10%',
-        top:'10%',
-        bottom: '10%',
-        right:"0",
+        left: '9%',
+        top:'8%',
+        bottom: '14%',
+        right:"5%",
         containLabel: false,
         backgroundColor:this.color,
         show: true
@@ -158,6 +159,10 @@ markData=this.data.echartStyleListAll
          axisTick:{
             show:false,
         },
+          /** 横坐标最后一个值显示 */
+                    axisLabel:{
+                      showMaxLabel:true,
+                    }
     },
     yAxis: [
         {
@@ -169,10 +174,32 @@ markData=this.data.echartStyleListAll
         axisTick:{
             show:false,
         },
-        min:Min1,
-        max:Max1,
+           min:function (value) {
+   if(value.min<0){
+       return (value.min + value.min*0.2).toFixed(0);
+    }else{
+      return (value.min - value.min*0.2).toFixed(0);
+    }
+},
+        max:function (value) {
+    if(value.max<0){
+      if(value.max<-5){
+ return (value.max - value.max*0.2).toFixed(0);
+      }else{
+ return (value.max - value.max*0.2).toFixed(1);
+      }
+     
+    }else{
+      if(value.max<5){
+ return (value.max + value.max*0.2).toFixed(1);
+      }else{
+         return (value.max + value.max*0.2).toFixed(0);
+      }
+       //return (value.max + value.max*0.2).toFixed(0);
+    }
+},
          splitNumber: 5,
-         interval:(Max1-Min1)/5,
+      //interval:(Max1-Min1)/5,
         splitLine: {
     lineStyle: {
         // 使用深浅的间隔色

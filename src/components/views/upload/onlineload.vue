@@ -22,7 +22,9 @@
 	    <div class="el-upload__tip" slot="tip">只能上传CSV文件，且不超过10M</div>
   	</el-upload>
   <br/>
-   <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=onLine"'>
+   <!-- <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=onLine"'> -->
+    <!--现场服务器 -->
+  <el-link :href='"http://10.0.1.213:6001/api/LoopInfo/templateDownload?type=quota"'> 
     <el-button size="small" type="primary">下载模板<i class="el-icon-download el-icon--right"></i></el-button>
 
   </el-link>

@@ -66,10 +66,10 @@ markData=this.data.echartStyleListAll
         transitionDuration:0
     },
          grid: {
-        left: '10%',
-        top:'10%',
-        bottom: '10%',
-        right:'0',
+         left: '9%',
+        top:'8%',
+        bottom: '14%',
+        right:"5%",
         containLabel: false,
          backgroundColor:this.color,
           show: true
@@ -81,6 +81,11 @@ markData=this.data.echartStyleListAll
          axisTick:{
             show:false,
         },
+         
+          /** 横坐标最后一个值显示 */
+                    axisLabel:{
+                      showMaxLabel:true,
+                    }
     },
     yAxis: [
         {
@@ -92,6 +97,42 @@ markData=this.data.echartStyleListAll
          axisTick:{
             show:false,
         },
+           min:function (value) {
+    //          console.log(value.min)
+    //           console.log(value.min - value.min*0.2)
+    // return value.min - value.min*0.2;
+    if(value.min<0){
+       return (value.min + value.min*0.2).toFixed(0);
+    }else{
+      return (value.min - value.min*0.2).toFixed(0);
+    }
+},
+//         max:function (value) {
+//           if(value.max<0){
+//       return (value.max - value.max*0.2).toFixed(0);
+//     }else{
+//        return (value.max + value.max*0.2).toFixed(0);
+//     }
+//     // return (value.max + value.max*0.2).toFixed(0);
+// },
+ max:function (value) {
+    if(value.max<0){
+      if(value.max<-5){
+ return (value.max - value.max*0.2).toFixed(0);
+      }else{
+ return (value.max - value.max*0.2).toFixed(1);
+      }
+     
+    }else{
+      if(value.max<5){
+ return (value.max + value.max*0.2).toFixed(1);
+      }else{
+         return (value.max + value.max*0.2).toFixed(0);
+      }
+       //return (value.max + value.max*0.2).toFixed(0);
+    }
+},
+ minInterval: 1,
      splitLine: {
     lineStyle: {
         // 使用深浅的间隔色

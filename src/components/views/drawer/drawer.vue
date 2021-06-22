@@ -12,27 +12,27 @@
   <!-- 头 -->
  <div class="drawerContent" id="pdfDom">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick" style="height:100%">
-    <el-tab-pane label="资产评估详情" name="daily"  v-scrollBar  style=" height:96%;overflow:auto;position:relative;">
-      <div class="contentDra">
+    <el-tab-pane label="回路评估详情" name="daily"   style="height:100%;">
+      <div class="contentDra" v-scrollBar style="overflow:auto;position:relative;">
       <div class="contentTile">
-        <div>
+        <div style="flex-grow:1">
           <el-button type="text">回路名称:</el-button>
       <el-button type="text">{{title}}</el-button>
         </div>
-      <div>
+      <div class="describe" style="flex-grow:4">
          <el-button type="text">描述:</el-button>
        <el-button type="text">{{describe}}</el-button>
       </div>
-      <div>
+      <div style="flex-grow:1">
         <el-button type="text">评估时间:</el-button>
       <el-button type="text">{{datetime}}</el-button>
       </div>
-      <div>
+      <div style="flex-grow:1">
        
 <!-- //getPdf()是我们在main.js中绑定在Vue中的，固定名称，直接调用即可下载，无需在methods中写方法 -->
       <el-button icon="el-icon-printer" type="text" @click="getPDF()">导出PDF</el-button>
       </div>
-      <div>
+      <div style="flex-grow:1">
          <el-button type="text">综合性能:</el-button>
      <el-button v-if="performance=='优'" class="button" type="success">优</el-button>
      <el-button v-if="performance=='良'" class="button" type="success">良</el-button>
@@ -51,7 +51,7 @@
      <div class="contentFirst1">
       <!-- <div class="first1Children1"></div> -->
        <!-- ['投用率', '有效投用率','平稳率','振荡指数','操作数','SP操作数','OP操作数','操作数总和','OP行程指数每小时'], -->
-      <peresult v-if="flag2" title="投用率%" text="BDP综合评价" :bdpdata="bdpValue0"></peresult> 
+      <peresult v-if="flag2" title="投用率%" text="对标看板" :bdpdata="bdpValue0"></peresult> 
       <peresult v-if="flag2" title="有效投用率%" :bdpdata="bdpValue1"></peresult> 
       <peresult v-if="flag2" title="平稳率" :bdpdata="bdpValue2"></peresult> 
       <peresult v-if="flag2" title="振荡指数" :bdpdata="bdpValue3"></peresult> 
@@ -298,6 +298,9 @@ created() {
 mounted() {
  
 },
+beforeDestroy(){
+  
+}
 }
 </script>
 <style >
@@ -313,7 +316,7 @@ mounted() {
 } */
 
 .el-button--text{
-  color:#747679
+  color:#747679 
 }
  .el-drawer__header{
   margin-bottom: 0px;
@@ -338,18 +341,22 @@ flex-direction: column;
 /** title的样式 */
 .contentTile{
 width: 100%;
-height: 5%;
+height: 3%;
 display: flex;
 justify-content:space-around;
+ /* flex-grow: 1; */
 /* background-color: rgba(0, 0, 255, 0.836); */
 /* background-color: cadetblue; */
 }
+/* .describe{
+   flex-grow: 1; 
+} */
 /** 第一个模块 */
 .contentFirst1{
 width: 100%;
 height: 20%;
 display: flex;
-flex-direction:row
+flex-direction:row;
 /* background-color: rgb(221, 191, 18); */
 /* background-color: rgb(56, 196, 28); */
 }
@@ -390,7 +397,7 @@ height: 100%;
 }
 .contentSix{
   width: 100%;
-height: 15%;
+height: 30%;
 /* background-color: rgba(80, 74, 77, 0.404); */
 display: flex;
 padding-bottom: 10px;

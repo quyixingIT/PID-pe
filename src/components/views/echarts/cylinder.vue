@@ -175,7 +175,7 @@ methods: {
       if (options && typeof options === "object") {
         myCharts.setOption(options, true);
         window.addEventListener("resize", () => { myCharts.resize();});
-		if(this.title=="变差回路个数"){
+		if(this.title=="劣势回路个数"){
 		 myCharts.getZr().on('click', params => {
           let pointInPixel = [params.offsetX, params.offsetY]
           if (myCharts.containPixel('grid', pointInPixel)) {

@@ -45,5 +45,5 @@ export const setAsyncRoutes = menu => {
  router.options.routes = defaultRoutes.concat(_menu);
 
   const b= router.options.routes
-   debugger
+  // debugger
 };

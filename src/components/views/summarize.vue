@@ -1,8 +1,8 @@
 <!-- 总览页面 -->
 <template>
-     <el-tabs v-model="activeName" @tab-click="handleClick" style="height:95%;padding-left:10px">
+     <el-tabs v-model="activeName" @tab-click="handleClick" style="height:100%;padding-left:10px">
     <el-tab-pane label="总览" name="first" style="height:100%">
-      <tab1 v-if="echartsFlag"></tab1>
+      <tab1 v-show="echartsFlag"></tab1>
     </el-tab-pane>
     <el-tab-pane label="分类总览" name="second" :lazy=true style="height:100%">
       <category></category>

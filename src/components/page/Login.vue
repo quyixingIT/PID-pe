@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">华理自动化控制资产管理平台V1.0</div>
+            <div class="ms-title">马钢化工苯加氢PID评估软件V1.0</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item  prop="username" >
                     <el-input v-model="param.username" placeholder="username">
@@ -287,7 +287,7 @@ export default {
             //  登录接口调用后，调用路由接口，后端返回相应用户的路由res.router，我们需要存储到store中，方便其他地方拿取
            // that.$store.commit('SET_ROUTES', menu);
             that.$store.commit('SET_ROUTES', res.routerInfoList);
-                debugger
+                //debugger
                 //const b= router.options.routes
                  //sessionStorage.setItem('menu', JSON.stringify(menu));
     //that.$store.dispatch("addRoutes", routerList);

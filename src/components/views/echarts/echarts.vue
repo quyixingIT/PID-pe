@@ -14,7 +14,8 @@ props:["id","title","item","dataTime"],
 data() {
 //这里存放数据
 return {    
-  showloading:false //是否显示无数据加载狂
+  showloading:false, //是否显示无数据加载狂
+  charts:null
 };
 },
 //监听属性 类似于data概念
@@ -101,7 +102,8 @@ methods: {
             }
           },
           grid:{
-              bottom:'12%'
+              bottom:'12%',
+              right:"4%"
           },
           tooltip: {   //鼠标悬浮框的提示文字
               trigger: 'axis',
@@ -272,7 +274,7 @@ methods: {
       if (options && typeof options === "object") {
         myCharts.setOption(options, true);
         window.addEventListener("resize", () => { myCharts.resize();});
-       
+       //this.charts=myCharts
     }
 //     if(this.showloading){
 //   myCharts.showLoading({
@@ -299,6 +301,10 @@ mounted(){
     this.my_charts(this.item)
    // this.my_charts(this.item1)
 },
+// beforeDestroy(){
+//   debugger
+// this.charts.clear()
+// },
 watch:{
   item:{
     handler(newVal,oldVal){
@@ -321,7 +327,7 @@ watch:{
 </script>
 <style scoped>
 .mycharts{
-    width: 50%;
+    width: 100%;
     height: 100%;
 }
 </style>

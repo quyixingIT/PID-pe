@@ -29,7 +29,9 @@
 			</div> -->
   <br/>
   <!-- <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=offLine"'> -->
-  <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=offLine"'>
+  <!-- <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=offLine"'> -->
+   <!--现场服务器 -->
+  <el-link :href='"http://10.0.1.213:6001/api/LoopInfo/templateDownload?type=quota"'> 
     <el-button size="small" type="primary">下载模板<i class="el-icon-download el-icon--right"></i></el-button>
 
   </el-link>

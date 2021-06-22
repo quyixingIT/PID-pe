@@ -5,6 +5,7 @@ let loading;
 export default {
   install(Vue, options) {
     Vue.prototype.getPdf = function(pdfTitle) {
+      //debugger
       loading = Loading.service({
         lock: true,
         text: "正在下载pdf...",

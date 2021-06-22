@@ -17,6 +17,12 @@ import htmlToPdf from './untils/htmlToPdf' /** 引入html转化PDF插件 */
 import PerfectScrollbar from 'perfect-scrollbar';
 //对应的css
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+//解决左侧导航栏缩小之后显示文字问题
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
+//自适应
+// import './untils/flexible'
+console.log(process.env)
 const elScrollBar = (el) => {
     if (el._ps_ instanceof PerfectScrollbar) {
       el._ps_.update()
@@ -71,7 +77,7 @@ router.beforeEach( async (to, from, next) => {
      if (hasToken) {
        //debugger
          if (to.path === '/login') {
-           debugger
+           //debugger
             //next({ path: '/Home' })
             //
             localStorage.removeItem('ms_username');
@@ -82,7 +88,7 @@ router.beforeEach( async (to, from, next) => {
            // location.reload()
             NProgress.done()
         } else {
-            debugger
+            //debugger
             let str=to.path
            let index= str.replace(/\//g,'')
            sessionStorage.setItem('index',index)

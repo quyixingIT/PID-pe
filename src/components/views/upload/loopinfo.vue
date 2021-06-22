@@ -25,8 +25,12 @@
   	</el-upload>
   <br/>
   <!-- 本机 -->
- <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=quota"'>
- <!-- <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=quota"'> -->
+ <!-- <el-link :href='"http://192.168.1.113:1008/api/LoopInfo/templateDownload?type=quota"'> -->
+ <!-- 服务器-->
+  <!-- <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=quota"'>  -->
+  <!--现场服务器 -->
+  <!-- <el-link :href='"http://10.0.1.213:6001/api/LoopInfo/templateDownload?type=quota"'>  -->
+    <el-link :href='"http://127.0.0.1:6001/api/LoopInfo/templateDownload?type=quota"'> 
     <el-button size="small" type="primary">下载模板<i class="el-icon-download el-icon--right"></i></el-button>
 
   </el-link>
@@ -43,7 +47,7 @@
   <el-button type="text"></el-button>
  
   <el-button v-show="btshow" size="small" type="warning" @click="canceluploadFile()">取消<i class="el-icon-upload el-icon--right"></i></el-button>
-<div class="tableStyle">
+<div id="pdfDom" class="tableStyle" v-scrollBar  style="overflow:auto;position:relative">
   <!-- :row-class-name="tableRowClassName" -->
   <!-- 行变色 -->
   <el-table
@@ -262,9 +266,15 @@ if(flag==0){
           }
        LoopInfo(this.fileData,config).then(
             res=>{
-             this.tableData= res.data.loopInfoList
+              if(res.data.success){
+                 this.tableData= res.data.loopInfoList
+
               console.log(res)
-             this.$message.success("选择成功,请核实！");
+             this.$message.success(res.data.msg);
+              }else{
+            this.$message.error(res.data.msg);
+              }
+             
              //this.btnshow=true;
 
             },err =>{
@@ -385,6 +395,8 @@ mounted() {
 <style scoped>
 .tableStyle{
   padding: 2px;
+  width:100%;
+  height:500px;
 }
  .el-table .warning-row {
     background: oldlace;

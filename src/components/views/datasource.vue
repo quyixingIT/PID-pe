@@ -1,6 +1,6 @@
 <!-- 数据源管理 -->
 <template>
-<div>
+<div class="datasource">
      <el-tabs v-model="activeName" @tab-click="handleClick">
     <!-- <el-tab-pane label="离线数据上传" :dataId="dataID" :dialogFlag="centerDialogVisible" name="third">
       <offupload></offupload>
@@ -184,7 +184,9 @@ mounted() {
 },
 }
 </script>
-<style >
+<style lang="less">
+.datasource{
+  
 .buttonStyle{
   text-align: center;
 }
@@ -256,4 +258,6 @@ background-color: rgba(148, 144, 144, 0.3)
  .el-table__header-wrapper thead :hover{
      background-color: rgb(127, 147, 177) !important;
 } 
+}
+
 </style>

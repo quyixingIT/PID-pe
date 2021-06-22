@@ -34,6 +34,9 @@
   <el-form-item>
     <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
   </el-form-item>
+  <el-form-item>
+    <el-button v-show="table1Show" type="warning" icon="el-icon-printer" @click="exportExcel">导出excel</el-button>
+  </el-form-item>
 </el-form>
     </div>
     <!-- 表格 -->
@@ -41,7 +44,7 @@
         <el-table
         border
        :max-height=tableHeight
-      
+      id="out-table"
    @sort-change="sortHandle"
     :data="tableData"
     style="width: 100%">
@@ -49,14 +52,14 @@
     <el-table-column
       prop="LoopName"
       label="回路名"
-       min-width='8'
+       min-width='15'
      >
      
     </el-table-column>
      <el-table-column
       prop="LoopDescription"
       label="描述"
-       min-width='8'
+       min-width='15'
      >
      
     </el-table-column>
@@ -105,23 +108,16 @@
       </template>
     </el-table-column>
     <el-table-column
-      prop="CreateTime"
+      prop="Remark"
       label="评估时间"
        min-width='14'
-       :formatter="dateFormat"
+      
       sortable="custom"
        column-key="date"
      
     >
     </el-table-column>
    
-    <!-- <el-table-column
-      prop="CompositeScore"
-      label="综合评分"
-      min-width='10'
-      sortable
-      >
-    </el-table-column> -->
    <el-table-column
       prop="Ratio"
       label="投用率（%）"
@@ -134,7 +130,7 @@
         </el-table-column>
         <el-table-column
       prop="EffectiveServiceFactor"
-      label="有效投用率（%）"
+      label="投用有效率（%）"
      min-width='15'
      sortable="custom"
       >
@@ -300,7 +296,7 @@
     class="msg-pagination-container"
      :background="isBackground"  
     @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="formInline.currentPage"
-                       :page-sizes="[10,50,100,150]" :page-size="formInline.pageSize" layout="sizes, prev, pager, next"
+                       :page-sizes="[100,500,1000]" :page-size="formInline.pageSize" layout="sizes, prev, pager, next"
                        :total="total">
         </el-pagination>
     </div>
@@ -398,6 +394,8 @@ import {tabledatalist} from '../../request/category'
 import {throttle} from '../../request/public'
 import appraiseVue from './appraise.vue'
 import { adduserUpdate } from '../../request/menumanage'
+import FileSaver from "file-saver"  //引入导出excel插件
+import XLSX from  "xlsx"  //引入导出excel插件
 export default {
 //import引入的组件需要注入到对象中才能使用
 
@@ -423,7 +421,7 @@ return {
     //设置禁用某些时间
      pickerBeginDateBefore:{
             disabledDate(time){
-              return  time.getTime() > Date.now()
+              return  time.getTime() > Date.now()-8.64e7
             }
         
         },
@@ -435,11 +433,11 @@ return {
           loopType:'',
           stockDate:this.getNowTime(),
           startTime:this.daysJian(),
-          endTime:this.getNowTime(),
+          endTime:this.daysJian(),
           sortName:'',
           sortType:'',
           "currentPage":1,
-          "pageSize":10,
+          "pageSize":100,
           index:this.getIndex(),
           sort:"",
           order:""
@@ -479,6 +477,25 @@ watch: {
 },
 //方法集合
 methods: {
+  //导出表格
+  exportExcel(){
+    var wb=XLSX.utils.table_to_book(document.querySelector("#out-table"))
+    var wbout =XLSX.write(wb,{
+      bookType:'xlsx',
+      bookSST:true,
+      type:'array'
+    });
+    try{
+      FileSaver.saveAs(
+        new Blob([wbout],{type:'application/octet-stream'}),
+        "分类总览.xlsx"
+      );
+
+    }catch(e){
+      if(typeof console !=="undefined") console.log(e,wbout)
+    }
+    return wbout
+  },
 //   BDPFormat(row,clo){
 //     debugger
 //     if(row.OperationNum==0){
@@ -583,6 +600,8 @@ methods: {
          this.title=row.LoopName
          this.describe=row.LoopDescription
          let d=this.dateFormat(row)
+         
+         //let d=row.CreateTime
          this.datetime=d
 
          this.performance=row.Performance
@@ -663,8 +682,9 @@ let date = new Date();//获取当前时间
 //时间格式化
 
       dateFormat(row){
-        if (row.CreateTime){
-                    var date=row.CreateTime
+        if (row.Remark){
+          debugger
+                    var date=row.Remark
                     date = new Date(date);
                     var y=date.getFullYear();
                     var m=date.getMonth()+1;
@@ -674,7 +694,8 @@ let date = new Date();//获取当前时间
                     var s=date.getSeconds();
                     m = m<10?("0"+m):m;
                     d = d<10?("0"+d):d;
-                    return y+"-"+m+"-"+d+" "+h+":"+m1+":"+s;
+                    //return y+"-"+m+"-"+d+" "+h+":"+m1+":"+s;
+                    return y+"-"+m+"-"+d;
                 }
            
       },
@@ -784,7 +805,7 @@ filters:{
              // debugger
                 const bindColor= {
                     0: '保持',
-                    1: '变差',
+                    1: '劣势',
  
                 };
                 return bindColor[bindStatus]

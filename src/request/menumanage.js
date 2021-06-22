@@ -110,3 +110,22 @@ export function updataUser(userInfoStr,str){
             }
         })
     }
+    /** 修改密码 */
+    export function Editpw(oldPwd,newPwd){
+        return axios({
+            url:'api/UserInfo/updateUserPwd',
+            params:{
+                oldPwd,
+                newPwd
+            }
+        })
+    }
+    /**密码重置 */
+    export function Restpw(userInfoStr){
+        return axios({
+            url:'api/UserInfo/resetUserPwd',
+            params:{
+                userInfoStr
+            }
+        })
+    }

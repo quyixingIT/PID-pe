@@ -84,7 +84,7 @@ export default {
             },
             get(){
                 //debugger
-                let a=this.$store.state.menu
+                //let a=this.$store.state.menu
                 return this.$store.state.menu
             }
         }
@@ -143,7 +143,7 @@ this.readMenu();
 };
 </script>
 
-<style scoped>
+<style lang="less">
 .sidebar {
     display: block;
     position: absolute;
@@ -153,7 +153,6 @@ this.readMenu();
     overflow-y: scroll;
     background-color: #324157;
 
-}
 .sidebar::-webkit-scrollbar {
     width: 0;
 }
@@ -164,4 +163,23 @@ this.readMenu();
 .sidebar > ul {
     height: 100%;
 }
+/*隐藏文字*/
+.el-menu--collapse  .el-submenu__title span{
+  display: none;
+}
+/*隐藏 > */
+.el-menu--collapse  .el-submenu__title .el-submenu__icon-arrow{
+  display: none;
+}
+
+.el-menu--collapse .el-menu-item {
+  color: transparent !important;
+  i{
+      color: #fff !important;
+  }
+}
+
+}
+
+
 </style>

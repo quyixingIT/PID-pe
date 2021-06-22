@@ -23,7 +23,7 @@ dataArr3:[]
 },
 //监听属性 类似于data概念
 computed: {},
-props:["id","title","item"],
+props:["id","title","item","allloop"],
 //监控data中的数据变化
 watch: {
     item:{
@@ -43,14 +43,8 @@ watch: {
 //方法集合
 methods: {
  my_charts(item){
-        // let dataTime=this.item[0].datatime //横坐标数据
-        // let data1=this.item[0].data1 //数据1
-        // let data2=this.item[0].data2 //数据2
-        // const title=["投运率","综合评分"]
-         //以下三步即可完成echarts的初始化使用,代码注释的详解别忘了看看哈~
-         //debugger
-         //当前视口宽度
-      let nowClientWidth = document.documentElement.clientWidth;
+     if(item){
+  let nowClientWidth = document.documentElement.clientWidth;
      // debugger
       // 换算方法
       let nowSize = function (val, initWidth = 1920) {
@@ -59,6 +53,83 @@ methods: {
         let that=this
        let echarts=this.$echarts
       this.myCharts = this.$echarts.init(document.querySelector(`#${this.id}`));
+      let dataArr=[]
+      let titleColor=""
+      if(this.id=="cylinder1"){
+          titleColor="#fc8d89";
+           dataArr= [{
+    // 数据项名称
+    name:"保持回路个数", // '正常回路数',
+    value : (this.allloop-this.item).toString(),
+     itemStyle:{
+        color:"rgb(103,194,58)"
+    },
+    //自定义特殊 tooltip，仅对该数据项有效
+    // tooltip:{
+    //     show:true,
+    // },
+    //自定义特殊itemStyle，仅对该item有效
+   // itemStyle:{}
+}, {
+    name: '劣势回路个数',
+    value: this.item.toString(),
+    itemStyle:{
+        color:'#fc8d89'
+    },
+    //  tooltip:{
+    //     show:true,
+    //     formatter:function(p){
+    //                debugger
+    //                return p.value
+    //            },
+    //     // axisPointer:{
+    //     //     //type:"cross",
+    //     //    label:{
+    //     //        show:true,
+               
+    //     //    },
+    //     // }
+    // },
+    }]
+      }else{
+          titleColor="rgba(25,223,221,.7)"
+           dataArr= [{
+    // 数据项名称
+    name:"优",
+    value :this.allloop[0].toFixed(0),
+    //自定义特殊 tooltip，仅对该数据项有效
+    //tooltip:{},
+    //自定义特殊itemStyle，仅对该item有效
+    itemStyle:{
+        color:"rgb(103,194,58)"
+    }
+}, {
+    name: '良',
+    value: this.allloop[1].toFixed(0),
+    itemStyle:{
+        color:"rgb(133,206,97)"
+    }
+    },{
+    name: '中',
+    value: this.allloop[2].toFixed(0),
+    itemStyle:{
+        color:"rgb(230,162,60)"
+    }},{
+    name: '差',
+    value: this.allloop[3].toFixed(0),
+    itemStyle:{
+          color:"rgb(247,137,137)"
+        
+    }},{
+    name: '开环',
+    value: this.allloop[4].toFixed(0),
+    itemStyle:{
+        color:"rgb(245,108,108)"
+    }
+    }
+       ]
+      }
+       
     // var xData = ['回路总数'];
 	// 	var yData = [500];
 	// 	var color="#19dfdd";
@@ -72,15 +143,35 @@ methods: {
   let options = {
    // backgroundColor: '#142468',
     title:{
-          text: '回路数' ,
+        show:true,
+          text: this.title ,
+          subtext:this.item.toString(),
+          textAlign:'center',
+      
           textStyle:{
-              color:'rgba(25,223,221,.7)',
+              color:titleColor,
               fontSize: 14,
+              fontWeight:'bold'
           },
-          top:'59%',
-          left:'47%'
+          z:0,
+          top:'42%',
+          left:'48%',
+          subtextStyle:{
+              fontSize:'20',
+              fontWeight:'bold',
+                color:titleColor
+          }
 
     },
+     tooltip: {
+          show: false,
+          trigger: 'item',
+          alwaysShowContent: true,
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+
+     
+
     series: [
         {
             type: 'pie',
@@ -169,18 +260,19 @@ methods: {
         {
             type: 'pie',
             zlevel: 5,
-            silent: true,
+            silent: true,//图形是否不响应和触发鼠标事件，默认为 false，即响应和触发鼠标事件。
             radius: ['80%', '78%'],
-            color: ["#fc8d89", "#46d3f3", "rgba(203,203,203,.2)"],
-            startAngle: 50,
+            color: ["#fc8d89"],
+            startAngle: 90, //起始角度，支持范围[0, 360]。
             hoverAnimation: false,
             // animation:true,    //charts3 no
             label: {
-                normal: {
-                    show: false
-                },
+                // normal: {
+                //     show: true
+                // },
+                //formatter:"{c}"
             },
-            data: [50, 20, 40]
+            data: [100] //第一个值是用总数减去变差数，第二个值是变差数
         },
         {
             name: "",
@@ -272,6 +364,7 @@ methods: {
                 show: 0,
             },
             detail: {
+                show:false,
                 borderColor: '#fff',
                 shadowColor: '#fff', //默认透明
                 shadowBlur: 2,
@@ -284,7 +377,7 @@ methods: {
             },
             data: [{
                 name: "",
-                value: item
+                value: this.item
             }]
         },
         {
@@ -308,6 +401,7 @@ methods: {
             radius: ['55%', '45%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,
+            textAlign: 'center',
             itemStyle: {
                 normal: {
                     color: '#80ADD2',
@@ -318,7 +412,13 @@ methods: {
                 normal: {
                     show: false,
                     position: 'center',
- 
+                    align: 'center',
+                verticalAlign: 'middle',
+                // 此处重点，字体大小设置为0
+                textStyle: {
+                  fontSize: '0'
+                }
+
                 },
                 emphasis: {
                     show: true,
@@ -327,7 +427,30 @@ methods: {
                         fontSize:nowSize(30),
                         fontWeight: 'bold',
                         
+                    },
+                     // 同步样式
+                formatter: function (params) {
+                    //debugger
+                    if(params.name=="劣势回路个数" || params.name=="保持回路个数"){
+                         return `{tTitle|${params.name}}\n{tSubTitle|${params.value}}`
+                    }else{
+                         return `{tTitle|${params.name}}\n{tSubTitle|${params.value+"%"}}`
                     }
+                 
+                },
+                rich: {
+                  tTitle: {
+                    fontSize: '14',
+                    fontWeight: 'bold',
+                    lineHeight: '25'
+                  },
+                  tSubTitle: {
+                    fontSize: '20',
+                    fontWeight: 'bold',
+                    lineHeight: '25'
+                  }
+                }
+
                 }
             },
             labelLine: {
@@ -335,15 +458,29 @@ methods: {
                     show: false
                 }
             },
-            data: [
-                25, 25, 25, 25, 25, 25
-            ]
+            data:dataArr
         },
     ]
 };
       //myCharts.setOption(options);
       if (options && typeof options === "object") {
         this.myCharts.setOption(options, true);
+         this.myCharts.on('mouseover', { seriesName: '中间环形图' }, params => {
+        this.myCharts.setOption({
+          title: {
+            show: false
+          }
+        })
+      })
+
+      this.myCharts.on('mouseout', { seriesName: '中间环形图' }, params => {
+        this.myCharts.setOption({
+          title: {
+            show: true
+          }
+        })
+      })
+
         window.addEventListener("resize", () => { this.myCharts.resize();});
         //给echarts增加鼠标事件 'click'，'dblclick'，'mousedown'，'mouseup'，'mouseover'，'mouseout'，'globalout'。
 //      this.myCharts.on('mouseover', function(params) {
@@ -356,6 +493,10 @@ methods: {
 // });
     
     }
+     }
+
+  
+    
     },
      doing() {
     let option = this.myCharts.getOption();
@@ -530,6 +671,9 @@ mounted() {
     // this.dataArr1=this._pie1()
     // this.dataArr2=this._pie2()
     // this.dataArr3=this._pie3()
+//     this.$nextTick(()=>{
+  
+// })
 this.my_charts(this.item);
 //let startTimer=this.startTimer()
 //debugger
@@ -543,7 +687,7 @@ let that=this
  //that._pie3()
  //that.animap()
  //that.doing()
-  this.timer = setInterval(this.startTimer, 1000);
+ // this.timer = setInterval(this.startTimer, 1000);
  
   
  },

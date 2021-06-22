@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="userinfo">
         <!-- <el-button type="primary" @click="addRow(allTableData)">新增</el-button> -->
         <el-table
                 :data="allTableData"
@@ -127,6 +127,11 @@
                             v-if="!showBtn[scope.$index]"
                             size="mini"
                             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                             <el-button
+                            v-if="!showBtn[scope.$index]"
+                            size="mini"
+                            type="warning"
+                            @click="restpassward(scope.$index, scope.row)">重置密码</el-button>
                     <el-button
                             v-if="!showBtn[scope.$index]"
                             size="mini"
@@ -184,7 +189,7 @@
 </template>
 
 <script>
-import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo} from "../../request/menumanage"
+import {getUsers,getSelectRole,updataUser,adduserUpdate,deleUserInfo,Restpw} from "../../request/menumanage"
 import {getuserInfoTree} from '../../request/download'
     export default {
         name: 'userinfo',
@@ -380,6 +385,36 @@ gettreeData(){
                 this.$set(this.showBtn,index,true);
                 this.disabled=false
             },
+            //重置密码
+            restpassward:function(index,row){
+              var rows=JSON.stringify(row)
+              debugger
+              this.$confirm('此操作将重置该用户密码, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                  Restpw(rows).then(res=>{
+                    debugger
+                    if(res.success){
+                      this.$message.success(res.msg);
+                    }else{
+                        this.$message.error(res.msg);
+                    }
+              }).catch(err=>{
+                this.$message.error('重置失败');
+                            console.log(err);
+              })
+                }).catch(()=>{
+                  this.$message({
+                        type: 'info',
+                        message: '已取消重置'
+                    });
+                })
+                   
+              
+
+            },
             //删除
             handleDelete:function(index,row,data) {
               //debugger
@@ -449,7 +484,7 @@ gettreeData(){
             },
             //更新
             handleUpdate:function(index,row){
-                debugger
+               // debugger
                  var rows=JSON.stringify(row)
                   let par=JSON.stringify(this.treeParmas)
                   //debugger
@@ -501,7 +536,7 @@ gettreeData(){
                      // debugger
                       //par=null
                        updataUser(rows,par).then(res=> {
-                         debugger
+                        // debugger
                           //var userinfoData=JSON.parse(localStorage.getItem("userinfoData"));
                             console.log(res)
                             /** 将selecet下拉框设为不可编辑 */
@@ -559,7 +594,7 @@ gettreeData(){
                     })
                 }else{
                      adduserUpdate(rows,par).then(res=> {
-                         debugger
+                        // debugger
                          /** 将selecet下拉框设为不可编辑 */
                          // var userinfoData=JSON.parse(localStorage.getItem("userinfoData"));
                                 this.disabled=true;
@@ -672,7 +707,8 @@ gettreeData(){
     };
 </script>
 
-<style >
+<style lang="less">
+.userinfo{
 .msg-pagination-container.is-background .el-pager li {
     /*对页数的样式进行修改*/
     background-color: #10263c;
@@ -788,6 +824,8 @@ background-color: rgba(148, 144, 144, 0.3)
    background-color:rgb(127, 147, 177)
   /* color: #f19944; */  /* 设置文字颜色，可以选择不设置 */
 }
+}
+
 /* .el-dropdown-menu{
     background-color: transparent;
 } */

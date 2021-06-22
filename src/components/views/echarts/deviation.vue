@@ -115,10 +115,10 @@ my_charts(){
         transitionDuration:0
     },
          grid: {
-        left: '10%',
-        top:'10%',
-        bottom: '10%',
-        right:'0',
+        left: '9%',
+        top:'8%',
+        bottom: '14%',
+        right:"5%",
         containLabel: false
     },
     xAxis: {
@@ -128,6 +128,10 @@ my_charts(){
          axisTick:{
             show:false,
         },
+          /** 横坐标最后一个值显示 */
+                    axisLabel:{
+                      showMaxLabel:true,
+                    }
     },
     yAxis: [
         {

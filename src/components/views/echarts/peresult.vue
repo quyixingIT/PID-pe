@@ -24,7 +24,8 @@ watch: {},
 //方法集合
 methods: {
 my_charts(){
-      let color=['#8FCE51','#FBBD01', '#FE0001', '#d48265', '#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570'];
+
+      let color=['#00ff00','#FBBD01', '#FE0001', '#d48265', '#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570'];
     let mycharts=this.$echarts.init(this.$refs.peresult)
     let echarts=this.$echarts
     let bdpValue=this.bdpdata //拿到父组件的值
@@ -52,13 +53,17 @@ my_charts(){
 				//symbolOffset : [ '100%', 0 ],
 				symbolSize : 0,
 				large : true,
+        emphasis: {
+    focus: 'series',
+    blurScope: 'coordinateSystem'
+    },
 				symbol : 'arrow', //图形 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
 				//legendHoverLink : true, //是否启用图例 hover 时的联动高亮。
 				//hoverAnimation : false, //是否开启鼠标 hover 的提示动画效果。
 				//effectType : 'ripple', //特效类型，目前只支持涟漪特效'ripple'。
 				//showEffectOn : 'render', //配置何时显示特效。可选：'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
         symbolRotate:'90',//箭头方响
-         symbolOffset :["160%","-80%"],//箭头偏移
+         symbolOffset :["120%","-50%"],//箭头偏移
 				cursor : 'pointer',
         label:{
           show:true,
@@ -82,7 +87,7 @@ my_charts(){
 				//hoverAnimation : true,
 				itemStyle : {
 					normal : {
-						color : '#91c7ae',
+						color : '#008b8b',
 						shadowBlur : 1,
 						shadowColor : '#333'
 					}
@@ -101,9 +106,10 @@ my_charts(){
         //subtext: '数据来自网络'
     },
      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+         top:'20%',
+        left: '2%',
+        right: '20%',
+        bottom: '10%',
         containLabel: true
     },
     xAxis: [
@@ -137,16 +143,23 @@ my_charts(){
             name: '第一区域',
             type: 'bar',
             stack: '绿色',
-
-            emphasis: {
-                focus: 'series'
-            },
             itemStyle:{
-                color:color[0]
+                 //color:color[0]
+                color:function(p){
+                  if(bdpValue[6]==0){
+                    return color[0]
+                  }else{
+                    return '#90ee90'
+                  }
+                }
+                
+
             },
             label:{
               show:true,
-              position: 'left',
+              //position: ['-110%', '80%'],
+               position: "left",
+               offset:[0,10],
               formatter:function(params){
                 //debugger
                    if (params.value == 1.1) {
@@ -166,7 +179,10 @@ my_charts(){
                
               }
             },
-           
+             emphasis: {
+                focus: 'series',
+                blurScope: 'global'
+            },
             data: [1],
            // data:[bdpValue[0]]
 
@@ -179,7 +195,14 @@ my_charts(){
                 focus: 'series'
             },
             itemStyle:{
-                color:color[0]
+               // color:color[0]
+               color:function(p){
+                  if(bdpValue[6]==1){
+                    return color[0]
+                  }else{
+                    return '#90ee90'
+                  }
+               }
             },
             data: [1]
             //data:[bdpValue[0]]
@@ -193,7 +216,14 @@ my_charts(){
                 focus: 'series'
             },
             itemStyle:{
-                color:color[1]
+                //color:color[1]
+                color:function(p){
+                  if(bdpValue[6]==2){
+                    return color[1]
+                  }else{
+                    return '#FFF8DC'
+                  }
+                }
             },
             data: [1]
             //data:[bdpValue[0]]
@@ -208,7 +238,10 @@ my_charts(){
             },
             label:{
               show:true,
-              position:'left',
+              //position:'left',
+               position: "left",
+               offset:[0,-10], //便宜
+               //position: ['-110%', '-10%'],
                formatter:function(params){
                
                    if (params.value == 1.1) {
@@ -227,7 +260,14 @@ my_charts(){
               }
             },
             itemStyle:{
-                color:color[2]
+                //color:color[2]
+                 color:function(p){
+                  if(bdpValue[6]==3){
+                    return color[2]
+                  }else{
+                    return '#FFB6C1'
+                  }
+                }
             },
              barMaxWidth:'30%',
             data: [1]

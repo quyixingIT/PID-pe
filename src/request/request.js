@@ -2,14 +2,26 @@ import axios from 'axios'
 import qs from 'qs'
 import {Loading} from 'element-ui';
 import vuerouter from '../router/index';
+//import {baseURL} from '../../process-env'
+// let baseURL
+// if(process.env.NODE_ENV === 'production'){
+//            baseURL="http://127.0.0.1:6001"
+//     }else if(process.env.NODE_ENV ==='test'){
+//     baseURL="http://192.168.1.180:6001"
+// }else{
+//     baseURL="http://192.168.1.124:8081"
+// }
 export default function request (option){
     return new Promise((resolve,reject) => {
         //创建axios的实例
     const instance = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
-     baseURL: 'http://192.168.1.113:1008',//本机
-    //baseURL: 'http://192.168.1.180:6001', ///服务器
+      // baseURL:'http://10.0.1.213:6001',  // 现场服务器
+        //baseURL:'http://127.0.0.1:6001', 
+     //baseURL: 'http://192.168.1.113:1008',//本机
+     baseURL:process.env.VUE_APP_URL,
+   // baseURL: 'http://192.168.1.180:6001', ///服务器
      timeout: 50000
 });
  //定义响应动画

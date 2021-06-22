@@ -1,4 +1,5 @@
 'use strict'
+const { options } = require('less')
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
@@ -13,27 +14,52 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+//const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
+// const px2remLoader ={
+//   loader:'px2rem-loader',
+//   options:{
+//     remUnit:192
+//   }
+// }
+// const postcssLoader ={
+//   loader:'postcss-loader',
+//   options:{
+//     sourceMap:options.sourceMap
+//   }
+// }
+// const loaders = options.usePostCSS ? [px2remLoader] : [px2remLoader]
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
+let baseURL,port
+if(process.env.NODE_ENV === 'production'){
+    if(process.env.VUE_APP_FLAG === 'production'){
+        baseURL='127.0.0.1';
+        port=6002;
+    }else{
+        baseURL="192.168.1.180";
+        port=6002;
+    }
+}else{
+    baseURL="192.168.1.124";
+    port=8081;
+}
 module.exports = {
-  /**
-   * You will need to set publicPath if you plan to deploy your site under a sub path,
-   * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
-   * then publicPath should be set to "/bar/".
-   * In most cases please use '/' !!!
-   * Detail: https://cli.vuejs.org/config/#publicpath
-   */
-  publicPath: './',
+   publicPath: './', 
   outputDir: 'docs',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  //assetsDir: 'public',
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
-          host: '192.168.1.124',
-         //host: '192.168.1.180',//服务器
-          port: 8081,
-         // port: 6002, //服务器
+    host:baseURL,
+    port:port,
+          //host: '192.168.1.124',
+         //host: '10.0.1.213',//服务器
+         // host:'127.0.0.1',
+        //host:'192.168.1.112',  //测试
+          //port: 8081,
+         //port: 6002, //服务器
+            //port:6002, //测试
           https: false,
           open: true,
           hotOnly: false,

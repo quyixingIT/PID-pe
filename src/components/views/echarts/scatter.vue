@@ -36,20 +36,41 @@ methods: {
         }
         },
           grid: {
-        left: '34%',
-        top:'10%',
-        bottom: '10%',
+        left: '35%',
+        top:'8%',
+        bottom: '14%',
+        right:'8%',
+        //  left: '9%',
+        // top:'8%',
+        // bottom: '14%',
+        // right:"5%",
         containLabel: false
     },
     xAxis: {
         name:'OP',
-        // nameLocation:'right',
+         //nameLocation:'right',
         type: 'value',
         //  nameGap:50,
         // nameRotate:360,
          axisTick:{
             show:false,
         },
+        min:function (value) {
+   if(value.min<0){
+       return value.min + value.min*0.2;
+    }else{
+      return value.min - value.min*0.2;
+    }
+},
+        max:function (value) {
+    if(value.max<0){
+      return (value.max - value.max*0.2).toFixed(0);
+    }else{
+        //console.log("最大值")
+        //console.log(value.max)
+       return (value.max + value.max*0.2).toFixed(0);
+    }
+},
          nameTextStyle:{
              color:'darkgray'
          },
@@ -69,6 +90,12 @@ methods: {
         nameTextStyle:{
              color:'darkgray'
          },
+            min:function (value) {
+    return (value.min - value.min*0.2).toFixed(0);
+},
+        max:function (value) {
+    return (value.max + value.max*0.2).toFixed(0);
+},
          splitLine: {
     lineStyle: {
         // 使用深浅的间隔色
@@ -78,7 +105,7 @@ methods: {
 },
     },
     series: [{
-        symbolSize: 10,
+        symbolSize: 2,
         data:OPPVValue,
         type: 'scatter'
     }]

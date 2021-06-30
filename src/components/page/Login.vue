@@ -1,7 +1,8 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">马钢化工苯加氢PID评估软件V1.0</div>
+            <!-- <div class="ms-title">马钢化工苯加氢PID评估软件V1.0</div> -->
+              <div class="ms-title">华理自动化控制资产管理平台软件V1.0</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item  prop="username" >
                     <el-input v-model="param.username" placeholder="username">

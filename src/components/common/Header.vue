@@ -6,7 +6,8 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">马钢化工苯加氢PID评估软件V1.0</div>
+        <!-- <div class="logo">马钢化工苯加氢PID评估软件V1.0</div> -->
+         <div class="logo">华理自动化控制资产管理平台软件V1.0</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -31,7 +32,8 @@
                 <!-- </div> -->
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../../assets/img/masteel.png" />
+                    <!-- <img src="../../assets/img/masteel.png" /> -->
+                     <img src="../../assets/img/hlauto.jpg" />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -95,7 +97,8 @@
 <p class="">授权回路个数:{{authorizeNum}}个</p>
 <p class="">授权装置:{{authorizeName}}</p>
 
-  <p style="font-weight:bold">马钢化工苯加氢PID评估软件软件许可条款</p>
+  <!-- <p style="font-weight:bold">马钢化工苯加氢PID评估软件软件许可条款</p> -->
+  <p style="font-weight:bold">华理自动化控制资产管理平台软件许可条款</p>
   <div style="height:90%">
     
       <div class="pContent">

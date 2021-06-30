@@ -30,7 +30,8 @@
   <!-- <el-link :href='"http://192.168.1.180:6001/api/LoopInfo/templateDownload?type=quota"'>  -->
   <!--现场服务器 -->
   <!-- <el-link :href='"http://10.0.1.213:6001/api/LoopInfo/templateDownload?type=quota"'>  -->
-    <el-link :href='"http://127.0.0.1:6001/api/LoopInfo/templateDownload?type=quota"'> 
+    <!-- <el-link :href='"http://127.0.0.1:6001/api/LoopInfo/templateDownload?type=quota"'>  -->
+    <el-link :href='downurl'> 
     <el-button size="small" type="primary">下载模板<i class="el-icon-download el-icon--right"></i></el-button>
 
   </el-link>
@@ -165,6 +166,7 @@ return {
      tableData: [],
      file:null,
      btshow:false,
+     downurl:'',
 };
 },
 //监听属性 类似于data概念
@@ -388,7 +390,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+this.downurl=process.env.VUE_APP_DOWN
 },
 }
 </script>
